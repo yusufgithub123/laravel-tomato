@@ -27,7 +27,20 @@
                         <p>Klik tombol upload atau drag & drop gambar ke area yang tersedia di halaman klasifikasi.</p>
                     </div>
                 </div>
-                <!-- Langkah-langkah lainnya -->
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Proses Klasifikasi</h3>
+                        <p>Sistem akan menganalisis gambar menggunakan AI untuk mendeteksi jenis penyakit atau kondisi daun.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Lihat Hasil</h3>
+                        <p>Dapatkan hasil klasifikasi beserta rekomendasi penanganan yang sesuai.</p>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -37,7 +50,8 @@
                 <li>Gunakan pencahayaan alami atau cahaya yang cukup terang</li>
                 <li>Ambil foto dari jarak 15-20 cm dari daun</li>
                 <li>Pastikan fokus pada daun yang ingin dianalisis</li>
-                <!-- Tips lainnya -->
+                <li>Hindari bayangan atau pantulan cahaya berlebih</li>
+                <li>Gunakan background yang kontras dengan warna daun</li>
             </ul>
         </div>
     </div>
