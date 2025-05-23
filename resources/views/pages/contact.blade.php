@@ -27,7 +27,26 @@
                             <span class="contact-value">leafguardtomato@gmail.com</span>
                         </div>
                     </div>
-                    <!-- Item kontak lainnya -->
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <span class="contact-label">Telepon</span>
+                            <span class="contact-value">+62 831-1431-6390</span>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <span class="contact-label">Lokasi</span>
+                            <span class="contact-value">Banjarmasin, Indonesia</span>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="social-media">
@@ -36,7 +55,12 @@
                         <a href="#" class="social-link whatsapp">
                             <i class="fab fa-whatsapp"></i>
                         </a>
-                        <!-- Media sosial lainnya -->
+                        <a href="#" class="social-link facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="social-link instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
                     </div>
                 </div>
             </div>
