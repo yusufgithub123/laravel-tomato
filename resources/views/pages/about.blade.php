@@ -15,7 +15,7 @@
             <p>LEAFGUARD-TOMATO adalah sistem klasifikasi otomatis berbasis deep learning...</p>
             
             <h3>Visi Kami</h3>
-            <p>Menjadi solusi teknologi terdepan dalam bidang pertanian digital...</p>
+            <p>Menjadi solusi teknologi terdepan jhjkhjkh dalam bidang pertanian digital...</p>
             
             <h3>Misi Kami</h3>
             <ul>
