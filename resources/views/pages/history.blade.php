@@ -30,7 +30,7 @@
                     @endif
                 </div>
                 <div class="history-status">
-                    <span class="status-badge {{ $history->is_healthy ? 'healthy' : 'diseased' }}">
+                    <span class="status-badge {{ $history->is_healthy ? 'status-healthy' : 'status-diseased' }}">
                         {{ $history->is_healthy ? 'Sehat' : 'Terinfeksi' }}
                     </span>
                     <form method="POST" action="{{ route('history.destroy', $history->id) }}" style="display: inline;">
@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <div class="history-status">
-                    <span class="status-badge diseased">Terinfeksi</span>
+                    <span class="status-badge status-diseased">Terinfeksi</span>
                     <button class="delete-history" onclick="deleteHistory(1)">
                         <i class="fas fa-trash"></i>
                     </button>
@@ -78,7 +78,7 @@
                     <span class="history-date">22 Mei 2025, 09:15</span>
                 </div>
                 <div class="history-status">
-                    <span class="status-badge healthy">Sehat</span>
+                    <span class="status-badge status-healthy">Sehat</span>
                     <button class="delete-history" onclick="deleteHistory(2)">
                         <i class="fas fa-trash"></i>
                     </button>
@@ -101,7 +101,7 @@
                     </div>
                 </div>
                 <div class="history-status">
-                    <span class="status-badge diseased">Terinfeksi</span>
+                    <span class="status-badge status-diseased">Terinfeksi</span>
                     <button class="delete-history" onclick="deleteHistory(3)">
                         <i class="fas fa-trash"></i>
                     </button>
@@ -208,19 +208,24 @@ function deleteHistory(id) {
 }
 
 .status-badge {
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.8em;
-    font-weight: bold;
-    color: white;
+    display: inline-block !important;
+    padding: 6px 12px !important;
+    border-radius: 20px !important;
+    font-size: 0.85em !important;
+    font-weight: bold !important;
+    color: white !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    margin-bottom: 10px !important;
+    min-width: 70px !important;
 }
 
-.status-badge.healthy {
-    background: #4CAF50;
+.status-badge.status-healthy {
+    background-color: #4CAF50 !important;
 }
 
-.status-badge.diseased {
-    background: #f44336;
+.status-badge.status-diseased {
+    background-color: #f44336 !important;
 }
 
 .solution-toggle {
@@ -233,20 +238,32 @@ function deleteHistory(id) {
     gap: 8px;
 }
 
+.solution-toggle:hover {
+    color: #45a049;
+}
+
 .solution-content {
     background: rgba(76, 175, 80, 0.1);
     padding: 15px;
     border-radius: 10px;
     margin-top: 10px;
+    border-left: 4px solid #4CAF50;
 }
 
 .delete-history {
-    background: transparent;
-    border: none;
-    color: #f44336;
-    cursor: pointer;
-    margin-top: 10px;
-    font-size: 1.2em;
+    background: transparent !important;
+    border: none !important;
+    color: #f44336 !important;
+    cursor: pointer !important;
+    font-size: 1.2em !important;
+    padding: 5px !important;
+    border-radius: 3px !important;
+    transition: all 0.3s ease !important;
+}
+
+.delete-history:hover {
+    background-color: rgba(244, 67, 54, 0.1) !important;
+    transform: scale(1.1) !important;
 }
 
 .empty-history {
@@ -290,6 +307,24 @@ function deleteHistory(id) {
 @keyframes fadeOut {
     from { opacity: 1; transform: translateY(0); }
     to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Media Query untuk responsivitas */
+@media (max-width: 768px) {
+    .history-item {
+        flex-direction: column;
+    }
+    
+    .history-image {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .history-status {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px 15px;
+    }
 }
 </style>
 @endsection
