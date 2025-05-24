@@ -134,6 +134,7 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
+    text-decoration: none; /* Menghilangkan underline */
 }
 
 .nav-pill.active, .nav-pill:hover {
@@ -141,6 +142,7 @@ body {
     color: #4CAF50;
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-decoration: none; /* Menghilangkan underline saat hover/active */
 }
 
 /* Main Content */
