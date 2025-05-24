@@ -135,3 +135,87 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+function showClassificationResult() {
+    // Hasil acak untuk demo
+    const results = [
+        { 
+            name: 'Early Blight', 
+            confidence: 95, 
+            status: 'Terinfeksi', 
+            color: '#f44336', 
+            icon: 'fa-exclamation',
+            isHealthy: false,
+            solution: 'Gunakan fungisida yang mengandung chlorothalonil atau copper-based. Hindari penyiraman dari atas tanaman.'
+        },
+        { 
+            name: 'Daun Sehat', 
+            confidence: 98, 
+            status: 'Sehat', 
+            color: '#4CAF50', 
+            icon: 'fa-check',
+            isHealthy: true,
+            solution: null
+        }
+    ];
+    const result = results[Math.floor(Math.random() * results.length)];
+    
+    const uploadBox = document.querySelector('.upload-box');
+    uploadBox.innerHTML = `
+        <div style="text-align: center;">
+            <div style="width: 100px; height: 100px; background: ${result.color}; 
+                border-radius: 50%; display: flex; align-items: center; 
+                justify-content: center; margin: 0 auto 20px; color: white; font-size: 2em;">
+                <i class="fas ${result.icon}"></i>
+            </div>
+            <h3 style="color: ${result.color};">${result.name}</h3>
+            <p>Tingkat kepercayaan: ${result.confidence}%</p>
+            <p style="margin: 20px 0;">Status: <strong style="color: ${result.color};">${result.status}</strong></p>
+            ${result.solution ? `<p><strong>Solusi:</strong> ${result.solution}</p>` : ''}
+            <button class="upload-btn" onclick="saveHistory()">SIMPAN RIWAYAT</button>
+            <button class="upload-btn" onclick="resetUpload()" style="background: #f44336; margin-top: 10px;">UPLOAD LAGI</button>
+        </div>
+    `;
+    
+    // Simpan data hasil untuk disimpan ke riwayat
+    uploadBox.dataset.result = JSON.stringify(result);
+}
+
+function saveHistory() {
+    const uploadBox = document.querySelector('.upload-box');
+    const result = JSON.parse(uploadBox.dataset.result);
+    const fileInput = document.getElementById('fileInput');
+    
+    if (!fileInput.files.length) {
+        alert('Tidak ada gambar yang diupload');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('image', fileInput.files[0]);
+    formData.append('disease_name', result.name);
+    formData.append('accuracy', result.confidence);
+    formData.append('is_healthy', result.isHealthy);
+    if (result.solution) {
+        formData.append('solution', result.solution);
+    }
+    
+    fetch('/save-history', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Hasil klasifikasi berhasil disimpan ke riwayat');
+            window.location.href = '/riwayat';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Gagal menyimpan riwayat');
+    });
+}

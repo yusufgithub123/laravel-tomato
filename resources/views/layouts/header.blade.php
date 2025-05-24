@@ -12,9 +12,16 @@
         </button>
         
         <div class="auth-buttons">
-            <button class="btn-masuk">MASUK</button>
-            <button class="btn-daftar">DAFTAR</button>
-        </div>
+    @auth
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="btn-masuk">LOGOUT</button>
+        </form>
+    @else
+        <a href="{{ route('login') }}" class="btn-masuk">MASUK</a>
+        <a href="{{ route('register') }}" class="btn-daftar">DAFTAR</a>
+    @endauth
+</div>
     </div>
 </header>
 
