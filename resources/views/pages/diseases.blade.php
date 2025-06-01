@@ -70,7 +70,7 @@
         </div>
         
         <div class="disease-card" onclick="openModal('healthy')">
-            <img src="{{ asset('assets/images/v11.jpeg') }}" alt="Healthy">
+            <img src="{{ asset('assets/images/v12.jpeg') }}" alt="Healthy">
             <h3>Daun Sehat</h3>
             <p>Daun tomat yang sehat menunjukkan warna hijau segar dan pertumbuhan normal.</p>
         </div>
