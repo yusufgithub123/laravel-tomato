@@ -38,19 +38,19 @@ except Exception as e:
 
 # IMPORTANT: Pastikan urutan ini sama dengan yang digunakan saat training!
 # Periksa kembali urutan class_names ini dengan dataset training Anda
-class_names = [
-    'Bacterial_spot',
-    'Early_blight', 
-    'Late_blight',
-    'Leaf_Mold',
-    'Septoria_leaf_spot',
-    'Spider_mites Two-spotted_spider_mite',
-    'Target_Spot',
-    'Tomato_Yellow_Leaf_Curl_Virus',
-    'Tomato_mosaic_virus',
-    'healthy',
-    'powdery_mildew'
-]
+class_names =[
+ 'Bercak_bakteri',
+ 'Bercak_daun_Septoria',
+ 'Bercak_Target',
+ 'Bercak_daun_awal',
+ 'Busuk_daun_lanjut',
+ 'Embun_tepung',
+ 'Jamur_daun',
+ 'Sehat',
+ 'Tungau_dua_bercak',
+ 'Virus_keriting_daun_kuning',
+ 'Virus_mosaik_tomat',
+ ]
 
 def preprocess_image(image, target_size=(224, 224)):
     from tensorflow.keras.applications.resnet50 import preprocess_input
@@ -72,95 +72,95 @@ def allowed_file(filename):
 def get_disease_info(disease_name):
     """Get disease information"""
     info = {
-        'Bacterial_spot': {
-            'name': 'Bacterial Spot',
-            'symptoms': 'Bercak coklat kecil dengan tepi kuning pada daun, buah, dan batang',
-            'causes': 'Bakteri Xanthomonas campestris',
-            'prevention': 'Gunakan benih bebas penyakit, hindari penyiraman dari atas, rotasi tanaman',
-            'treatment': 'Gunakan bakterisida yang mengandung tembaga, praktikkan rotasi tanaman',
-            'severity': 'medium'
-        },
-        'Early_blight': {
-            'name': 'Early Blight',
-            'symptoms': 'Lesi coklat dengan cincin konsentris pada daun, dimulai dari daun bawah',
-            'causes': 'Jamur Alternaria solani',
-            'prevention': 'Jaga drainase yang baik, hindari stress pada tanaman, mulsa tanah',
-            'treatment': 'Gunakan fungisida yang mengandung chlorothalonil, buang daun yang terinfeksi',
-            'severity': 'medium'
-        },
-        'Late_blight': {
-            'name': 'Late Blight',
-            'symptoms': 'Bercak berair yang menjadi coklat pada daun dan batang, bulu putih di bawah daun',
-            'causes': 'Oomycete Phytophthora infestans',
-            'prevention': 'Hindari kelembaban tinggi, sirkulasi udara yang baik, tanam varietas tahan',
-            'treatment': 'Gunakan fungisida sistemik seperti metalaxyl, hancurkan tanaman yang terinfeksi',
-            'severity': 'high'
-        },
-        'Leaf_Mold': {
-            'name': 'Leaf Mold',
-            'symptoms': 'Bercak kuning pada permukaan atas daun, lapisan fuzzy hijau-abu di bawah daun',
-            'causes': 'Jamur Passalora fulva',
-            'prevention': 'Tingkatkan sirkulasi udara, kurangi kelembaban, jaga jarak tanam',
-            'treatment': 'Tingkatkan sirkulasi udara dan gunakan fungisida yang sesuai',
-            'severity': 'medium'
-        },
-        'Septoria_leaf_spot': {
-            'name': 'Septoria Leaf Spot',
-            'symptoms': 'Bercak bulat kecil dengan pusat abu-abu dan tepi coklat pada daun',
-            'causes': 'Jamur Septoria lycopersici',
-            'prevention': 'Hindari penyiraman dari atas, mulsa tanah, rotasi tanaman',
-            'treatment': 'Hapus daun yang terinfeksi dan gunakan fungisida yang mengandung tembaga',
-            'severity': 'medium'
-        },
-        'Spider_mites Two-spotted_spider_mite': {
-            'name': 'Spider Mites',
-            'symptoms': 'Daun menguning, bintik putih kecil, jaring laba-laba halus',
-            'causes': 'Tungau Tetranychus urticae',
-            'prevention': 'Jaga kelembaban udara, hindari stress kekeringan',
-            'treatment': 'Gunakan mitisida atau sabun insektisida',
-            'severity': 'medium'
-        },
-        'Target_Spot': {
-            'name': 'Target Spot',
-            'symptoms': 'Lesi coklat dengan pola cincin target pada daun dan buah',
-            'causes': 'Jamur Corynespora cassiicola',
-            'prevention': 'Jaga sirkulasi udara, hindari penanaman terlalu rapat',
-            'treatment': 'Gunakan fungisida dan hindari penanaman rapat',
-            'severity': 'medium'
-        },
-        'Tomato_Yellow_Leaf_Curl_Virus': {
-            'name': 'Tomato Yellow Leaf Curl Virus',
-            'symptoms': 'Daun menguning, menggulung ke atas, pertumbuhan terhambat',
-            'causes': 'Virus TYLCV oleh kutu kebul',
-            'prevention': 'Kendalikan kutu kebul, gunakan mulsa reflektif',
-            'treatment': 'Tanam varietas tahan, kendalikan kutu kebul',
-            'severity': 'high'
-        },
-        'Tomato_mosaic_virus': {
-            'name': 'Tomato Mosaic Virus',
-            'symptoms': 'Pola mosaik hijau terang dan gelap pada daun, daun keriting',
-            'causes': 'Virus TMV yang menular',
-            'prevention': 'Benih bebas virus, sterilisasi alat',
-            'treatment': 'Hancurkan tanaman terinfeksi, sterilisasi alat',
-            'severity': 'high'
-        },
-        'healthy': {
-            'name': 'Healthy Plant',
-            'symptoms': 'Daun hijau segar tanpa bercak',
-            'causes': 'Tidak ada penyakit',
-            'prevention': 'Pertahankan kondisi optimal',
-            'treatment': 'Tanaman sehat, lanjutkan perawatan optimal',
-            'severity': 'none'
-        },
-        'powdery_mildew': {
-            'name': 'Powdery Mildew',
-            'symptoms': 'Lapisan putih seperti tepung pada permukaan daun',
-            'causes': 'Jamur Leveillula atau Oidium',
-            'prevention': 'Jaga sirkulasi udara, hindari kelembaban',
-            'treatment': 'Gunakan fungisida sulfur atau potassium bicarbonate',
-            'severity': 'medium'
-        }
+    'Bercak_bakteri': {
+        'name': 'Bercak Bakteri',
+        'symptoms': 'Bercak coklat kecil dengan tepi kuning pada daun, buah, dan batang',
+        'causes': 'Bakteri Xanthomonas campestris',
+        'prevention': 'Gunakan benih bebas penyakit, hindari penyiraman dari atas, rotasi tanaman',
+        'treatment': 'Gunakan bakterisida yang mengandung tembaga, praktikkan rotasi tanaman',
+        'severity': 'sedang'
+    },
+    'Bercak_daun_Septoria': {
+        'name': 'Bercak Daun Septoria',
+        'symptoms': 'Bercak bulat kecil dengan pusat abu-abu dan tepi coklat pada daun',
+        'causes': 'Jamur Septoria lycopersici',
+        'prevention': 'Hindari penyiraman dari atas, mulsa tanah, rotasi tanaman',
+        'treatment': 'Hapus daun yang terinfeksi dan gunakan fungisida yang mengandung tembaga',
+        'severity': 'sedang'
+    },
+    'Bercak_Target': {
+        'name': 'Bercak Target',
+        'symptoms': 'Lesi coklat dengan pola cincin target pada daun dan buah',
+        'causes': 'Jamur Corynespora cassiicola',
+        'prevention': 'Jaga sirkulasi udara, hindari penanaman terlalu rapat',
+        'treatment': 'Gunakan fungisida dan hindari penanaman rapat',
+        'severity': 'sedang'
+    },
+    'Bercak_daun_awal': {
+        'name': 'Bercak Daun Awal',
+        'symptoms': 'Lesi coklat dengan cincin konsentris pada daun, dimulai dari daun bawah',
+        'causes': 'Jamur Alternaria solani',
+        'prevention': 'Jaga drainase yang baik, hindari stres pada tanaman, mulsa tanah',
+        'treatment': 'Gunakan fungisida yang mengandung chlorothalonil, buang daun yang terinfeksi',
+        'severity': 'sedang'
+    },
+    'Busuk_daun_lanjut': {
+        'name': 'Busuk Daun Lanjut',
+        'symptoms': 'Bercak berair yang menjadi coklat pada daun dan batang, bulu putih di bawah daun',
+        'causes': 'Oomycete Phytophthora infestans',
+        'prevention': 'Hindari kelembaban tinggi, sirkulasi udara yang baik, tanam varietas tahan',
+        'treatment': 'Gunakan fungisida sistemik seperti metalaxyl, hancurkan tanaman yang terinfeksi',
+        'severity': 'tinggi'
+    },
+    'Embun_tepung': {
+        'name': 'Embun Tepung',
+        'symptoms': 'Lapisan putih seperti tepung pada permukaan daun',
+        'causes': 'Jamur Leveillula atau Oidium',
+        'prevention': 'Jaga sirkulasi udara, hindari kelembaban',
+        'treatment': 'Gunakan fungisida sulfur atau potassium bicarbonate',
+        'severity': 'sedang'
+    },
+    'Jamur_daun': {
+        'name': 'Jamur Daun',
+        'symptoms': 'Bercak kuning pada permukaan atas daun, lapisan fuzzy hijau-abu di bawah daun',
+        'causes': 'Jamur Passalora fulva',
+        'prevention': 'Tingkatkan sirkulasi udara, kurangi kelembaban, jaga jarak tanam',
+        'treatment': 'Tingkatkan sirkulasi udara dan gunakan fungisida yang sesuai',
+        'severity': 'sedang'
+    },
+    'Sehat': {
+        'name': 'Tanaman Sehat',
+        'symptoms': 'Daun hijau segar tanpa bercak',
+        'causes': 'Tidak ada penyakit',
+        'prevention': 'Pertahankan kondisi optimal',
+        'treatment': 'Tanaman sehat, lanjutkan perawatan optimal',
+        'severity': 'tidak ada'
+    },
+    'Tungau_dua_bercak': {
+        'name': 'Tungau Dua Bercak',
+        'symptoms': 'Daun menguning, bintik putih kecil, jaring laba-laba halus',
+        'causes': 'Tungau Tetranychus urticae',
+        'prevention': 'Jaga kelembaban udara, hindari stres kekeringan',
+        'treatment': 'Gunakan mitisida atau sabun insektisida',
+        'severity': 'sedang'
+    },
+    'Virus_keriting_daun_kuning': {
+        'name': 'Virus Keriting Daun Kuning',
+        'symptoms': 'Daun menguning, menggulung ke atas, pertumbuhan terhambat',
+        'causes': 'Virus TYLCV oleh kutu kebul',
+        'prevention': 'Kendalikan kutu kebul, gunakan mulsa reflektif',
+        'treatment': 'Tanam varietas tahan, kendalikan kutu kebul',
+        'severity': 'tinggi'
+    },
+    'Virus_mosaik_tomat': {
+        'name': 'Virus Mosaik Tomat',
+        'symptoms': 'Pola mosaik hijau terang dan gelap pada daun, daun keriting',
+        'causes': 'Virus TMV yang menular',
+        'prevention': 'Benih bebas virus, sterilisasi alat',
+        'treatment': 'Hancurkan tanaman terinfeksi, sterilisasi alat',
+        'severity': 'tinggi'
     }
+}
     
     return info.get(disease_name, {
         'name': disease_name,

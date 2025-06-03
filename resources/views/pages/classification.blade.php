@@ -1,183 +1,302 @@
 @extends('layouts.app')
 
 @section('content')
+<link href="{{ asset('css/classification.css') }}" rel="stylesheet">
 
-<div class="container">
-    
-    <h2 class="mb-4">🩺 Klasifikasi Penyakit Daun Tomat</h2>
-
-    <form id="classificationForm" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="imageInput" class="form-label">Upload Gambar Daun Tomat</label>
-            <input class="form-control" type="file" id="imageInput" name="image" accept="image/*" required>
-            <div class="form-text">Format yang diterima: JPG, PNG, GIF (maksimal 16MB)</div>
+<div class="classification-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="classification-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-leaf"></i> Klasifikasi Penyakit Daun Tomat</h2>
+                    </div>
+                    
+                    <div class="upload-container">
+                        <div class="upload-area" id="dropArea">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text" id="uploadText">
+                                Seret & lepas gambar daun tomat di sini atau klik untuk memilih file
+                            </div>
+                            <input type="file" id="fileInput" class="file-input" accept="image/*">
+                            <div class="file-info" id="fileInfo">
+    <div class="file-preview-container">
+        <img src="" class="file-preview" id="filePreview">
+    </div>
+    <div>
+        <strong>Nama File:</strong> <span id="fileName"></span><br>
+        <strong>Ukuran:</strong> <span id="fileSize"></span><br>
+        <strong>Tipe:</strong> <span id="fileType"></span>
+    </div>
+</div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button id="classifyBtn" class="classify-btn" disabled>
+                                <i class="fas fa-search mr-2"></i> Klasifikasi Sekarang
+                            </button>
+                        </div>
+                        
+                        <div class="loading-spinner" id="loadingSpinner">
+                            <div class="spinner"></div>
+                            <p>Memproses gambar...</p>
+                        </div>
+                        
+                        <div class="error-message" id="errorMessage"></div>
+                        
+                        <div class="result-container" id="resultContainer">
+                            <div class="result-card">
+                                <div class="result-header">
+                                    <i class="fas fa-clipboard-check mr-2"></i> Hasil Klasifikasi
+                                </div>
+                                <div class="result-body" id="resultBody">
+                                    <!-- Results will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-success">Klasifikasi Sekarang</button>
-    </form>
-
-    <div id="preview" class="mt-4"></div>
-
-    <div id="result" class="mt-4">
-        {{-- Hasil klasifikasi akan muncul di sini --}}
     </div>
 </div>
 
 <script>
-    document.getElementById('classificationForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
+document.addEventListener('DOMContentLoaded', function() {
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+    const uploadText = document.getElementById('uploadText');
+    const fileInfo = document.getElementById('fileInfo');
+    const filePreview = document.getElementById('filePreview');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const fileType = document.getElementById('fileType');
+    const classifyBtn = document.getElementById('classifyBtn');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const resultContainer = document.getElementById('resultContainer');
+    const resultBody = document.getElementById('resultBody');
+    const errorMessage = document.getElementById('errorMessage');
 
-        const imageInput = document.getElementById('imageInput');
-        const resultDiv = document.getElementById('result');
-        const previewDiv = document.getElementById('preview');
-
-        // Clear previous results
-        resultDiv.innerHTML = '';
-        previewDiv.innerHTML = '';
-
-        if (imageInput.files.length === 0) {
-            resultDiv.innerHTML = `<div class="alert alert-danger">❌ Silakan pilih gambar terlebih dahulu.</div>`;
-            return;
-        }
-
-        const selectedFile = imageInput.files[0];
-        
-        // Validate file size (16MB limit)
-        if (selectedFile.size > 16 * 1024 * 1024) {
-            resultDiv.innerHTML = `<div class="alert alert-danger">❌ Ukuran file terlalu besar. Maksimal 16MB.</div>`;
-            return;
-        }
-
-        // Show file preview
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            previewDiv.innerHTML = `
-                <div class="mb-3">
-                    <h5>Preview Gambar:</h5>
-                    <img src="${e.target.result}" class="img-fluid rounded shadow-sm" style="max-width: 300px;" alt="Preview">
-                </div>
-            `;
-        };
-        reader.readAsDataURL(selectedFile);
-
-        // Prepare form data
-        const formData = new FormData();
-        formData.append('image', selectedFile);
-
-        // Show loading message
-        resultDiv.innerHTML = `
-            <div class="alert alert-info">
-                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-                ⏳ Mengirim gambar dan memproses klasifikasi...
-            </div>
-        `;
-
-        try {
-            console.log('Sending request to API...');
-            const response = await fetch('http://localhost:5000/predict', {
-                method: 'POST',
-                body: formData,
-                // Don't set Content-Type header, let browser set it with boundary
-            });
-
-            console.log('Response status:', response.status);
-            const data = await response.json();
-            console.log('Response data:', data);
-
-            if (data.success) {
-                const result = data.data;
-                
-                // Display classification results
-                resultDiv.innerHTML = `
-                    <div class="card shadow">
-                        <div class="card-header bg-success text-white">
-                            <h5 class="mb-0">✅ Hasil Klasifikasi</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h6>📊 Hasil Prediksi:</h6>
-                                    <p><strong>Kelas:</strong> <code>${result.classification.class}</code></p>
-                                    <p><strong>Nama Penyakit:</strong> <span class="badge ${result.classification.is_healthy ? 'bg-success' : 'bg-warning'}">${result.classification.class_name}</span></p>
-                                    <p><strong>Kepercayaan:</strong> <strong>${result.classification.confidence_percentage}%</strong></p>
-                                    <p><strong>Status:</strong> ${result.classification.is_healthy ? '<span class="text-success">✓ Tanaman Sehat</span>' : '<span class="text-warning">⚠️ Terdeteksi Penyakit</span>'}</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <h6>🦠 Informasi Penyakit:</h6>
-                                    <p><strong>Gejala:</strong> ${result.disease_info.symptoms}</p>
-                                    <p><strong>Penyebab:</strong> ${result.disease_info.causes}</p>
-                                    <p><strong>Tingkat Keparahan:</strong> 
-                                        <span class="badge ${getSeverityBadgeClass(result.disease_info.severity)}">${result.disease_info.severity}</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h6>🛡️ Pencegahan:</h6>
-                                    <p>${result.disease_info.prevention}</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <h6>💊 Pengobatan:</h6>
-                                    <p>${result.disease_info.treatment}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                resultDiv.innerHTML = `
-                    <div class="alert alert-danger">
-                        <h5>❌ Klasifikasi Gagal</h5>
-                        <p><strong>Error:</strong> ${data.error}</p>
-                        <small class="text-muted">Pastikan API Python sedang berjalan di localhost:5000</small>
-                    </div>
-                `;
-            }
-
-        } catch (error) {
-            console.error('Error:', error);
-            resultDiv.innerHTML = `
-                <div class="alert alert-danger">
-                    <h5>❌ Koneksi Error</h5>
-                    <p><strong>Error:</strong> ${error.message}</p>
-                    <small class="text-muted">
-                        Pastikan:
-                        <ul class="mt-2">
-                            <li>API Python berjalan di <code>localhost:5000</code></li>
-                            <li>CORS sudah dikonfigurasi dengan benar</li>
-                            <li>Tidak ada firewall yang memblokir koneksi</li>
-                        </ul>
-                    </small>
-                </div>
-            `;
-        }
+    // Prevent default drag behaviors
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
     });
 
-    function getSeverityBadgeClass(severity) {
-        switch(severity) {
-            case 'high': return 'bg-danger';
-            case 'medium': return 'bg-warning';
-            case 'low': return 'bg-info';
-            case 'none': return 'bg-success';
-            default: return 'bg-secondary';
-        }
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
     }
 
-    // Test API connection on page load
-    window.addEventListener('load', async function() {
+    // Highlight drop area when item is dragged over it
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight() {
+        dropArea.classList.add('active');
+    }
+
+    function unhighlight() {
+        dropArea.classList.remove('active');
+    }
+
+    // Handle dropped files
+    dropArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+    }
+
+    // Handle click to select files
+    dropArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    // Handle file selection
+    fileInput.addEventListener('change', function() {
+        handleFiles(this.files);
+    });
+
+    function handleFiles(files) {
+        if (files.length === 0) return;
+        
+        const file = files[0];
+        
+        // Validate file type
+        if (!file.type.match('image.*')) {
+            showError('File harus berupa gambar (JPG, PNG, GIF)');
+            return;
+        }
+        
+        // Validate file size (16MB max)
+        if (file.size > 16 * 1024 * 1024) {
+            showError('Ukuran file terlalu besar. Maksimal 16MB.');
+            return;
+        }
+        
+        // Clear any previous errors
+        hideError();
+        
+        // Display file info
+        uploadText.style.display = 'none';
+        fileInfo.classList.add('active');
+        
+        // Display file name and info
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        fileType.textContent = file.type;
+        
+        // Display preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            filePreview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        
+        // Enable classify button
+        classifyBtn.disabled = false;
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.classList.add('active');
+        classifyBtn.disabled = true;
+        fileInfo.classList.remove('active');
+        uploadText.style.display = 'block';
+    }
+
+    function hideError() {
+        errorMessage.classList.remove('active');
+    }
+
+    // Handle classification
+    classifyBtn.addEventListener('click', async function() {
+        if (fileInput.files.length === 0) {
+            showError('Silakan pilih gambar terlebih dahulu');
+            return;
+        }
+        
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append('image', file);
+        
+        // Show loading spinner
+        loadingSpinner.classList.add('active');
+        classifyBtn.disabled = true;
+        resultContainer.classList.remove('active');
+        
         try {
-            const response = await fetch('http://localhost:5000/health');
+            const response = await fetch('http://localhost:5000/predict', {
+                method: 'POST',
+                body: formData
+            });
+            
             const data = await response.json();
             
-            if (data.success && data.model_loaded) {
-                console.log('✅ API connection successful, model loaded');
+            if (data.success) {
+                displayResults(data.data);
             } else {
-                console.warn('⚠️ API connected but model not loaded');
+                showError(data.error || 'Terjadi kesalahan saat memproses gambar');
             }
         } catch (error) {
-            console.error('❌ Cannot connect to API:', error);
+            console.error('Error:', error);
+            showError('Gagal terhubung ke server. Pastikan API berjalan.');
+        } finally {
+            loadingSpinner.classList.remove('active');
+            classifyBtn.disabled = false;
         }
     });
+
+    function displayResults(result) {
+        // Clear previous results
+        resultBody.innerHTML = '';
+        
+        // Create result HTML
+        const resultHTML = `
+            <div class="result-row">
+                <div class="result-label">Kelas Penyakit:</div>
+                <div class="result-value">
+                    <strong>${result.classification.class_name}</strong>
+                    <span class="badge ${result.classification.is_healthy ? 'severity-none' : 'severity-high'} ml-2">
+                        ${result.classification.is_healthy ? 'Sehat' : 'Sakit'}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="result-row">
+                <div class="result-label">Tingkat Kepercayaan:</div>
+                <div class="result-value">
+                    ${result.classification.confidence_percentage}%
+                    <div class="confidence-meter">
+                        <div class="confidence-level" style="width: ${result.classification.confidence_percentage}%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-row">
+                <div class="result-label">Tingkat Keparahan:</div>
+                <div class="result-value">
+                    <span class="severity-badge ${getSeverityClass(result.disease_info.severity)}">
+                        ${result.disease_info.severity}
+                    </span>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="result-row">
+                <div class="result-label">Gejala:</div>
+                <div class="result-value">${result.disease_info.symptoms}</div>
+            </div>
+            
+            <div class="result-row">
+                <div class="result-label">Penyebab:</div>
+                <div class="result-value">${result.disease_info.causes}</div>
+            </div>
+            
+            <hr>
+            
+            <div class="result-row">
+                <div class="result-label">Pencegahan:</div>
+                <div class="result-value">${result.disease_info.prevention}</div>
+            </div>
+            
+            <div class="result-row">
+                <div class="result-label">Pengobatan:</div>
+                <div class="result-value">${result.disease_info.treatment}</div>
+            </div>
+        `;
+        
+        resultBody.innerHTML = resultHTML;
+        resultContainer.classList.add('active');
+    }
+
+    function getSeverityClass(severity) {
+        switch(severity.toLowerCase()) {
+            case 'high': return 'severity-high';
+            case 'medium': return 'severity-medium';
+            case 'low': return 'severity-low';
+            case 'none': return 'severity-none';
+            default: return '';
+        }
+    }
+});
 </script>
 
 @endsection
