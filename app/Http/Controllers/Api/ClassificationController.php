@@ -77,9 +77,11 @@ class ClassificationController extends Controller
                 'severity' => $diseaseInfo['severity']
             ];
 
-            // Simpan ke history jika user login
+            // Simpan ke history HANYA jika user login
             $history = null;
-            if (Auth::check()) {
+            $isUserLoggedIn = Auth::check();
+            
+            if ($isUserLoggedIn) {
                 $history = History::create([
                     'user_id' => Auth::id(),
                     'image_path' => $imagePath,
@@ -95,7 +97,8 @@ class ClassificationController extends Controller
                 ]);
             }
 
-            return response()->json([
+            // Response yang berbeda untuk user login dan guest
+            $responseData = [
                 'success' => true,
                 'data' => [
                     'classification' => [
@@ -114,10 +117,22 @@ class ClassificationController extends Controller
                         'treatment' => $result['treatment'],
                         'severity' => $result['severity']
                     ],
-                    'history' => $history ? $this->transformHistory($history) : null,
-                    'image_url' => Storage::url($imagePath)
+                    'image_url' => Storage::url($imagePath),
+                    'user_logged_in' => $isUserLoggedIn
                 ]
-            ]);
+            ];
+
+            // Tambahkan history ke response hanya jika user login
+            if ($isUserLoggedIn && $history) {
+                $responseData['data']['history'] = $this->transformHistory($history);
+            }
+
+            // Tambahkan pesan untuk guest user
+            if (!$isUserLoggedIn) {
+                $responseData['data']['guest_message'] = 'Hasil klasifikasi berhasil. Login untuk menyimpan riwayat.';
+            }
+
+            return response()->json($responseData);
 
         } catch (\Exception $e) {
             Log::error('Classification error: ' . $e->getMessage(), [

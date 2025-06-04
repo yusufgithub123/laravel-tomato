@@ -11,16 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('histories', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
-    $table->string('image_path');
-    $table->string('disease_name');
-    $table->decimal('accuracy', 5, 2);
-    $table->boolean('is_healthy');
-    $table->text('solution')->nullable();
-    $table->timestamps();
-});
+        Schema::create('histories', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('image_path');
+            $table->string('disease_name');
+            $table->string('disease_class')->nullable();
+            $table->decimal('accuracy', 5, 2);
+            $table->boolean('is_healthy');
+            $table->text('symptoms')->nullable();
+            $table->text('causes')->nullable();
+            $table->text('prevention')->nullable();
+            $table->text('treatment')->nullable();
+            $table->string('severity')->nullable();
+            $table->text('solution')->nullable(); // Untuk backward compatibility
+            $table->timestamps();
+        });
     }
 
     /**

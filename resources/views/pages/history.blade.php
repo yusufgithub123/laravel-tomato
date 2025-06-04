@@ -14,113 +14,216 @@
             @foreach($histories as $history)
             <div class="history-item">
                 <div class="history-image">
-                    <img src="{{ asset('storage/' . $history->image_path) }}" alt="Scan Result">
+                    @if($history->image_path)
+                        @if(filter_var($history->image_path, FILTER_VALIDATE_URL))
+                            <img src="{{ $history->image_path }}" alt="Scan Result" onerror="this.src='/images/placeholder.jpg'">
+                        @else
+                            <img src="{{ asset('storage/' . $history->image_path) }}" alt="Scan Result" onerror="this.src='/images/placeholder.jpg'">
+                        @endif
+                    @else
+                        <img src="/images/placeholder.jpg" alt="No image">
+                    @endif
                 </div>
                 <div class="history-info">
-                    <h3>{{ $history->disease_name }}</h3>
-                    <p>Tingkat Akurasi: {{ number_format($history->accuracy, 0) }}%</p>
+                    <h3>{{ $history->disease_name ?? 'Unknown Disease' }}</h3>
+                    <p>Tingkat Akurasi: {{ number_format($history->accuracy ?? 0, 0) }}%</p>
                     <span class="history-date">{{ $history->created_at->format('d M Y, H:i') }}</span>
-                    @if(!$history->is_healthy && $history->solution)
-                        <div class="solution-toggle" onclick="toggleSolution(this)">
-                            <i class="fas fa-lightbulb"></i> Lihat Solusi
-                        </div>
-                        <div class="solution-content" style="display: none;">
-                            <p>{{ $history->solution }}</p>
+                    
+                    @if(!$history->is_healthy)
+                        <!-- Display disease information if not healthy -->
+                        @if($history->symptoms)
+                            <div class="disease-info">
+                                <strong>Gejala:</strong> {{ $history->symptoms }}
+                            </div>
+                        @endif
+                        
+                        @if($history->causes)
+                            <div class="disease-info">
+                                <strong>Penyebab:</strong> {{ $history->causes }}
+                            </div>
+                        @endif
+                        
+                        <!-- Solution -->
+                        @if($history->treatment || $history->prevention || $history->solution)
+                            <div class="solution-toggle" onclick="toggleSolution(this)">
+                                <i class="fas fa-lightbulb"></i> Lihat Solusi
+                            </div>
+                            <div class="solution-content" style="display: none;">
+                                @if($history->treatment)
+                                    <div class="solution-section">
+                                        <strong>Pengobatan:</strong>
+                                        <p>{{ $history->treatment }}</p>
+                                    </div>
+                                @endif
+                                
+                                @if($history->prevention)
+                                    <div class="solution-section">
+                                        <strong>Pencegahan:</strong>
+                                        <p>{{ $history->prevention }}</p>
+                                    </div>
+                                @endif
+                                
+                                @if($history->solution && !$history->treatment && !$history->prevention)
+                                    <p>{{ $history->solution }}</p>
+                                @endif
+                            </div>
+                        @endif
+                    @else
+                        <div class="healthy-info">
+                            <p><i class="fas fa-leaf text-green"></i> Tanaman dalam kondisi sehat! Lanjutkan perawatan yang baik.</p>
                         </div>
                     @endif
                 </div>
                 <div class="history-status">
-                    <span class="status-badge {{ $history->is_healthy ? 'status-healthy' : 'status-diseased' }}">
-                        {{ $history->is_healthy ? 'Sehat' : 'Terinfeksi' }}
-                    </span>
-                    <form method="POST" action="{{ route('history.destroy', $history->id) }}" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="delete-history" onclick="return confirm('Apakah Anda yakin ingin menghapus riwayat ini?')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </form>
-                </div>
+    <span class="status-badge {{ $history->is_healthy ? 'healthy' : 'diseased' }}">
+        {{ $history->is_healthy ? 'Sehat' : 'Terinfeksi' }}
+    </span>
+    
+    {{-- Opsi 1: Menggunakan AJAX untuk delete (Recommended) --}}
+    <button type="button" class="delete-history" onclick="deleteHistory({{ $history->id }})">
+        <i class="fas fa-trash"></i>
+    </button>
+    
+    {{-- Opsi 2: Form dengan redirect yang benar --}}
+    {{-- 
+    <form method="POST" action="{{ route('history.destroy', $history->id) }}" style="display: inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus riwayat ini?')">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="delete-history">
+            <i class="fas fa-trash"></i>
+        </button>
+    </form>
+    --}}
+</div>
             </div>
             @endforeach
+            
+            <!-- Pagination if needed -->
+            @if($histories instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                <div class="pagination-wrapper">
+                    {{ $histories->links() }}
+                </div>
+            @endif
         @else
-            <!-- Data contoh jika belum ada data dari database -->
-            <div class="history-item">
-                <div class="history-image">
-                    <img src="{{ asset('assets/images/v1.jpeg') }}" alt="Scan Result">
-                </div>
-                <div class="history-info">
-                    <h3>Early Blight</h3>
-                    <p>Tingkat Akurasi: 95%</p>
-                    <span class="history-date">23 Mei 2025, 14:30</span>
-                    <div class="solution-toggle" onclick="toggleSolution(this)">
-                        <i class="fas fa-lightbulb"></i> Lihat Solusi
-                    </div>
-                    <div class="solution-content" style="display: none;">
-                        <p>Gunakan fungisida yang sesuai dan kurangi kelembaban di sekitar tanaman.</p>
-                    </div>
-                </div>
-                <div class="history-status">
-                    <span class="status-badge status-diseased">Terinfeksi</span>
-                    <button class="delete-history" onclick="deleteHistory(1)">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <div class="history-item">
-                <div class="history-image">
-                    <img src="{{ asset('assets/images/v11.jpeg') }}" alt="Scan Result">
-                </div>
-                <div class="history-info">
-                    <h3>Daun Sehat</h3>
-                    <p>Tingkat Akurasi: 98%</p>
-                    <span class="history-date">22 Mei 2025, 09:15</span>
-                </div>
-                <div class="history-status">
-                    <span class="status-badge status-healthy">Sehat</span>
-                    <button class="delete-history" onclick="deleteHistory(2)">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <div class="history-item">
-                <div class="history-image">
-                    <img src="{{ asset('assets/images/v3.jpeg') }}" alt="Scan Result">
-                </div>
-                <div class="history-info">
-                    <h3>Bacterial Spot</h3>
-                    <p>Tingkat Akurasi: 87%</p>
-                    <span class="history-date">21 Mei 2025, 16:45</span>
-                    <div class="solution-toggle" onclick="toggleSolution(this)">
-                        <i class="fas fa-lightbulb"></i> Lihat Solusi
-                    </div>
-                    <div class="solution-content" style="display: none;">
-                        <p>Gunakan bakterisida tembaga dan hindari penyiraman dari atas.</p>
-                    </div>
-                </div>
-                <div class="history-status">
-                    <span class="status-badge status-diseased">Terinfeksi</span>
-                    <button class="delete-history" onclick="deleteHistory(3)">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        @endif
-
-        @if(isset($histories) && $histories->count() == 0)
+            <!-- Empty state -->
             <div class="empty-history">
                 <i class="fas fa-history"></i>
                 <h3>Belum ada riwayat</h3>
                 <p>Mulai klasifikasi daun tomat untuk melihat riwayat di sini</p>
-                <a href="{{ route('classification') }}" class="btn-classify">Mulai Klasifikasi</a>
+                <a href="{{ route('classification') }}" class="btn-primary">Mulai Klasifikasi</a>
             </div>
         @endif
     </div>
 </div>
 
+<!-- Success/Error Messages -->
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-error">
+        {{ session('error') }}
+    </div>
+@endif
+
 <script>
+    function toggleSolution(element) {
+    const solutionContent = element.nextElementSibling;
+    if (solutionContent.style.display === 'none') {
+        solutionContent.style.display = 'block';
+        element.innerHTML = '<i class="fas fa-lightbulb"></i> Sembunyikan Solusi';
+    } else {
+        solutionContent.style.display = 'none';
+        element.innerHTML = '<i class="fas fa-lightbulb"></i> Lihat Solusi';
+    }
+}
+
+// Function untuk delete history dengan AJAX
+function deleteHistory(historyId) {
+    if (!confirm('Apakah Anda yakin ingin menghapus riwayat ini?')) {
+        return;
+    }
+    
+    // Show loading state
+    const deleteBtn = event.target.closest('.delete-history');
+    const originalContent = deleteBtn.innerHTML;
+    deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    deleteBtn.disabled = true;
+    
+    // Send AJAX request
+    fetch(`/history/${historyId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Remove the history item from DOM
+            deleteBtn.closest('.history-item').remove();
+            
+            // Show success message
+            showAlert('success', data.message || 'Riwayat berhasil dihapus');
+            
+            // Check if no more history items
+            if (document.querySelectorAll('.history-item').length === 0) {
+                location.reload(); // Reload to show empty state
+            }
+        } else {
+            // Show error message
+            showAlert('error', data.message || 'Gagal menghapus riwayat');
+            
+            // Restore button
+            deleteBtn.innerHTML = originalContent;
+            deleteBtn.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('error', 'Terjadi kesalahan saat menghapus riwayat');
+        
+        // Restore button
+        deleteBtn.innerHTML = originalContent;
+        deleteBtn.disabled = false;
+    });
+}
+
+// Function untuk show alert
+function showAlert(type, message) {
+    // Remove existing alerts
+    document.querySelectorAll('.alert').forEach(alert => alert.remove());
+    
+    // Create new alert
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type}`;
+    alert.textContent = message;
+    
+    // Add to page
+    document.body.appendChild(alert);
+    
+    // Auto hide after 5 seconds
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 300);
+    }, 5000);
+}
+
+// Auto-hide messages after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 300);
+        }, 5000);
+    });
+});
 function toggleSolution(element) {
     const solutionContent = element.nextElementSibling;
     if (solutionContent.style.display === 'none') {
@@ -132,199 +235,52 @@ function toggleSolution(element) {
     }
 }
 
-function deleteHistory(id) {
-    if (confirm('Apakah Anda yakin ingin menghapus riwayat ini?')) {
-        // Simulasi penghapusan untuk data contoh
-        const item = document.querySelector(`.history-item button[onclick="deleteHistory(${id})"]`).closest('.history-item');
-        item.style.animation = 'fadeOut 0.5s ease';
-        setTimeout(() => item.remove(), 500);
-    }
-}
+// Auto-hide messages after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 300);
+        }, 5000);
+    });
+});
 </script>
 
 <style>
-.history-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.history-item {
-    display: flex;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    animation: fadeIn 0.5s ease;
-}
-
-.history-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.history-image {
-    width: 150px;
-    height: 150px;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.history-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.history-info {
-    flex-grow: 1;
-    padding: 15px;
-}
-
-.history-info h3 {
-    margin: 0 0 5px 0;
-    color: #2d5a2d;
-}
-
-.history-info p {
-    margin: 5px 0;
-    color: #666;
-}
-
-.history-date {
-    font-size: 0.9em;
-    color: #888;
-}
-
-.history-status {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
-    min-width: 100px;
-}
-
-.status-badge {
-    display: inline-block !important;
-    padding: 6px 12px !important;
-    border-radius: 20px !important;
-    font-size: 0.85em !important;
-    font-weight: bold !important;
-    color: white !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-    margin-bottom: 10px !important;
-    min-width: 70px !important;
-}
-
-.status-badge.status-healthy {
-    background-color: #4CAF50 !important;
-}
-
-.status-badge.status-diseased {
-    background-color: #f44336 !important;
-}
-
-.solution-toggle {
-    color: #4CAF50;
-    cursor: pointer;
-    margin-top: 10px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.solution-toggle:hover {
-    color: #45a049;
-}
-
-.solution-content {
-    background: rgba(76, 175, 80, 0.1);
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 10px;
-    border-left: 4px solid #4CAF50;
-}
-
-.delete-history {
-    background: transparent !important;
-    border: none !important;
-    color: #f44336 !important;
-    cursor: pointer !important;
-    font-size: 1.2em !important;
-    padding: 5px !important;
-    border-radius: 3px !important;
-    transition: all 0.3s ease !important;
-}
-
-.delete-history:hover {
-    background-color: rgba(244, 67, 54, 0.1) !important;
-    transform: scale(1.1) !important;
-}
-
-.empty-history {
-    text-align: center;
-    padding: 60px 20px;
-    color: #666;
-}
-
-.empty-history i {
-    font-size: 4em;
-    color: #ddd;
-    margin-bottom: 20px;
-}
-
-.empty-history h3 {
-    color: #2d5a2d;
-    margin-bottom: 10px;
-}
-
-.btn-classify {
-    display: inline-block;
-    padding: 12px 24px;
-    background: #4CAF50;
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 5px;
     color: white;
-    text-decoration: none;
-    border-radius: 25px;
-    margin-top: 20px;
-    transition: all 0.3s ease;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
 }
 
-.btn-classify:hover {
-    background: #45a049;
-    transform: translateY(-2px);
+.alert-success {
+    background-color: #4CAF50;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.alert-error {
+    background-color: #f44336;
 }
 
-@keyframes fadeOut {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(-10px); }
+.text-green {
+    color: #4CAF50;
 }
 
-/* Media Query untuk responsivitas */
-@media (max-width: 768px) {
-    .history-item {
-        flex-direction: column;
-    }
-    
-    .history-image {
-        width: 100%;
-        height: 200px;
-    }
-    
-    .history-status {
-        flex-direction: row;
-        justify-content: space-between;
-        padding: 10px 15px;
-    }
+.healthy-info {
+    background-color: #e8f5e8;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.pagination-wrapper {
+    margin-top: 30px;
+    text-align: center;
 }
 </style>
 @endsection
