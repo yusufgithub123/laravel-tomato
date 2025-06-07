@@ -64,42 +64,6 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="contact-form">
-                <div class="form-header">
-                    <h2>Kirim Pesan</h2>
-                    <p>Sampaikan pertanyaan atau masukan Anda kepada kami</p>
-                </div>
-                
-                <form class="modern-form" method="POST" action="{{ route('contact.submit') }}">
-                    @csrf
-                    <div class="form-row">
-                        <div class="form-group">
-                            <input type="text" name="name" placeholder="Nama Lengkap" required>
-                            <label>Nama Lengkap</label>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" name="email" placeholder="Email" required>
-                            <label>Email</label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <input type="text" name="subject" placeholder="Subjek" required>
-                        <label>Subjek</label>
-                    </div>
-                    
-                    <div class="form-group">
-                        <textarea name="message" placeholder="Pesan Anda" rows="5" required></textarea>
-                        <label>Pesan Anda</label>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn">
-                        <span>Kirim Pesan</span>
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </form>
-            </div>
         </div>
     </div>
 </div>
@@ -107,45 +71,34 @@
 
 @section('scripts')
 <script>
-document.querySelector('.modern-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const form = this;
-    const submitBtn = form.querySelector('.submit-btn');
-    const originalText = submitBtn.innerHTML;
-    
-    submitBtn.innerHTML = '<span>Mengirim...</span>';
-    submitBtn.disabled = true;
-    
-    // Simpan data form
-    const formData = new FormData(form);
-    
-    // Kirim data ke server (simulasi)
-    setTimeout(() => {
-        alert('Pesan berhasil dikirim! Kami akan segera menghubungi Anda.');
-        form.reset();
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-    }, 2000);
-    
-    // Untuk implementasi nyata, gunakan fetch API atau AJAX
-    /*
-    fetch(form.action, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-        form.reset();
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
+// Animasi dan efek interaktif
+document.addEventListener('DOMContentLoaded', function() {
+    // Parallax effect untuk background
+    window.addEventListener('scroll', function() {
+        const scrolled = window.pageYOffset;
+        const contactInfo = document.querySelector('.contact-info');
+        if (contactInfo) {
+            contactInfo.style.transform = `translateY(${scrolled * 0.1}px)`;
+        }
     });
-    */
+    
+    // Hover effect untuk contact items
+    const contactItems = document.querySelectorAll('.contact-item');
+    contactItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(10px)';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0)';
+        });
+    });
+    
+    // Animasi untuk social links
+    const socialLinks = document.querySelectorAll('.social-link');
+    socialLinks.forEach((link, index) => {
+        link.style.animationDelay = `${index * 0.1}s`;
+    });
 });
 </script>
 @endsection

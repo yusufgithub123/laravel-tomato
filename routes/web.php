@@ -16,41 +16,7 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
-// Public Routes (tidak perlu login)
-Route::get('/home', function () {
-    return view('pages.home');
-})->name('home');
-
-// Route klasifikasi - PUBLIC (bisa diakses tanpa login)
-Route::get('/klasifikasi', function () {
-    return view('pages.classification');
-})->name('classification');
-
-// Alternative route untuk klasifikasi 
-Route::get('/classification', function () {
-    return view('pages.classification');
-})->name('classification.alt');
-
-// Public information pages
-Route::get('/penyakit', function () {
-    return view('pages.diseases');
-})->name('diseases');
-
-Route::get('/panduan', function () {
-    return view('pages.guide');
-})->name('guide');
-
-Route::get('/tentang', function () {
-    return view('pages.about');
-})->name('about');
-
-Route::get('/kontak', function () {
-    return view('pages.contact');
-})->name('contact');
-
-Route::post('/kontak', [ContactController::class, 'submit'])->name('contact.submit');
-
-// Authentication Routes
+// Authentication Routes - HANYA untuk guest (belum login)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
@@ -59,20 +25,56 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [LoginController::class, 'register']);
 });
 
+// Logout route - hanya untuk user yang sudah login
 Route::post('/logout', [LoginController::class, 'logout'])
     ->name('logout')
     ->middleware('auth');
 
-// Protected Routes (perlu login)
+// Protected Routes - SEMUA HALAMAN UTAMA PERLU LOGIN
 Route::middleware(['auth'])->group(function () {
-    // History routes
+    
+    // Halaman utama - semua perlu login
+    Route::get('/home', function () {
+        return view('pages.home');
+    })->name('home');
+
+    // Route klasifikasi - PROTECTED (perlu login)
+    Route::get('/klasifikasi', function () {
+        return view('pages.classification');
+    })->name('classification');
+
+    // Alternative route untuk klasifikasi 
+    Route::get('/classification', function () {
+        return view('pages.classification');
+    })->name('classification.alt');
+
+    // Halaman informasi - semua perlu login
+    Route::get('/penyakit', function () {
+        return view('pages.diseases');
+    })->name('diseases');
+
+    Route::get('/panduan', function () {
+        return view('pages.guide');
+    })->name('guide');
+
+    Route::get('/tentang', function () {
+        return view('pages.about');
+    })->name('about');
+
+    Route::get('/kontak', function () {
+        return view('pages.contact');
+    })->name('contact');
+
+    Route::post('/kontak', [ContactController::class, 'submit'])->name('contact.submit');
+
+    // History routes - sudah protected
     Route::get('/riwayat', [HistoryController::class, 'index'])->name('history');
     Route::get('/history', [HistoryController::class, 'index'])->name('history.alt');
     Route::get('/history/{id}', [HistoryController::class, 'show'])->name('history.show');
     Route::delete('/history/{id}', [HistoryController::class, 'destroy'])->name('history.destroy');
     Route::delete('/history', [HistoryController::class, 'bulkDelete'])->name('history.bulk-delete');
 
-    // Store classification result (hanya untuk user yang login)
+    // Store classification result
     Route::post('/history/store-classification', [HistoryController::class, 'storeClassification'])->name('history.store.classification');
     Route::post('/save-history', [HistoryController::class, 'storeClassification'])->name('history.store');
     Route::post('/save-classification', [HistoryController::class, 'storeClassification'])->name('save.classification');

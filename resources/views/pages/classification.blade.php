@@ -3,6 +3,12 @@
 @section('content')
 <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
+<div id="riwayat" class="page active">
+    <div class="page-title">
+        <h1>RIWAYAT</h1>
+        <div class="title-underline"></div>
+    </div>
+
 <div class="classification-page">
     <div class="container">
         <div class="row justify-content-center">
@@ -424,18 +430,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="result-label">Pengobatan:</div>
                 <div class="result-value">${result.disease_info.treatment || 'Konsultasi dengan ahli'}</div>
             </div>
-            
-            ${result.validation_info ? `
-            <hr>
-            <div class="result-row">
-                <div class="result-label">Info Validasi:</div>
-                <div class="result-value">
-                    Confidence daun: ${(result.validation_info.leaf_confidence * 100).toFixed(1)}%<br>
-                    Pre-validasi: <span class="badge severity-none">Lulus</span><br>
-                    Model validasi: <span class="badge severity-none">Lulus</span>
-                </div>
-            </div>
-            ` : ''}
         `;
         
         // Insert the HTML into the result body
