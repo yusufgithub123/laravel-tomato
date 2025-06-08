@@ -1514,45 +1514,92 @@ hr {
     padding-left: 25px;
 }
 
+/* Solution Toggle Styling */
 .solution-toggle {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #ff9500, #ff7b00);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 20px;
-    background: linear-gradient(135deg, #FFC107, #FF9800);
-    color: white;
-    border-radius: 25px;
-    cursor: pointer;
+    justify-content: space-between;
     transition: all 0.3s ease;
-    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(255, 149, 0, 0.2);
+    user-select: none;
     font-weight: 500;
 }
 
 .solution-toggle:hover {
-    background: linear-gradient(135deg, #FF9800, #F57C00);
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, #e68500, #e66900);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 149, 0, 0.3);
+}
+
+.solution-toggle:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(255, 149, 0, 0.2);
 }
 
 .solution-toggle.active {
-    background: linear-gradient(135deg, #FF9800, #F57C00);
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.solution-toggle.active:hover {
+    background: linear-gradient(135deg, #218838, #1ea085);
+}
+
+.solution-toggle i {
+    margin-right: 8px;
+    font-size: 1rem;
 }
 
 .toggle-icon {
-    margin-left: auto;
     transition: transform 0.3s ease;
+    font-size: 0.8rem;
+    margin-left: 8px;
 }
 
+.solution-toggle.active .toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* Solution Content Styling */
 .solution-content {
-    display: none;
-    background: rgba(255, 193, 7, 0.1);
-    border-radius: 15px;
-    padding: 20px;
-    margin-top: 10px;
-    border-left: 4px solid #FFC107;
+    display: none; /* Initially hidden */
+    padding: 16px;
+    margin-top: 8px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    animation: slideDown 0.3s ease-out;
 }
 
+.solution-content.show {
+    display: block;
+}
+
+/* Animation for smooth reveal */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 500px;
+    }
+}
+
+/* Solution Section Styling */
 .solution-section {
-    margin-bottom: 15px;
+    margin-bottom: 16px;
 }
 
 .solution-section:last-child {
@@ -1563,15 +1610,64 @@ hr {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 8px;
-    color: #FF9800;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.9rem;
+}
+
+.solution-header i {
+    color: #28a745;
+    font-size: 1rem;
+    width: 16px;
+    text-align: center;
 }
 
 .solution-section p {
+    padding-left: 24px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #6c757d;
     margin: 0;
-    color: #555;
-    line-height: 1.5;
-    padding-left: 25px;
+    text-align: justify;
+}
+
+/* Special styling for different solution types */
+.solution-section[data-type="treatment"] .solution-header {
+    color: #dc3545;
+}
+
+.solution-section[data-type="treatment"] .solution-header i {
+    color: #dc3545;
+}
+
+.solution-section[data-type="prevention"] .solution-header {
+    color: #007bff;
+}
+
+.solution-section[data-type="prevention"] .solution-header i {
+    color: #007bff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .solution-toggle {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+    
+    .solution-content {
+        padding: 12px;
+    }
+    
+    .solution-section p {
+        padding-left: 20px;
+        font-size: 0.8rem;
+    }
+    
+    .solution-header {
+        font-size: 0.85rem;
+    }
 }
 
 .healthy-info {
