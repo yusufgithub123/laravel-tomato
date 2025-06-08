@@ -1337,3 +1337,375 @@ if (typeof module !== 'undefined' && module.exports) {
         trackEvent
     };
 }
+
+
+// ===== DELETE HISTORY FUNCTIONALITY =====
+function deleteHistory(historyId) {
+    console.log('Attempting to delete history with ID:', historyId);
+    
+    // Show confirmation dialog
+    if (!confirm('Apakah Anda yakin ingin menghapus riwayat ini?')) {
+        return;
+    }
+    
+    // Get CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    if (!csrfToken) {
+        console.error('CSRF token not found');
+        showNotification('Token keamanan tidak ditemukan', 'error');
+        return;
+    }
+    
+    // Show loading state
+    const deleteButton = document.querySelector(`button[onclick="deleteHistory(${historyId})"]`);
+    const originalContent = deleteButton?.innerHTML;
+    
+    if (deleteButton) {
+        deleteButton.disabled = true;
+        deleteButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    }
+    
+    // Send delete request to the correct route
+    fetch(`/history/${historyId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        console.log('Delete response status:', response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Delete response data:', data);
+        
+        if (data.success) {
+            // Remove the history card from DOM
+            removeHistoryCard(historyId);
+            showNotification('Riwayat berhasil dihapus', 'success');
+            
+            // Check if no more history items
+            checkEmptyState();
+        } else {
+            console.error('Delete failed:', data.message);
+            showNotification(data.message || 'Gagal menghapus riwayat', 'error');
+            
+            // Restore button state
+            if (deleteButton && originalContent) {
+                deleteButton.disabled = false;
+                deleteButton.innerHTML = originalContent;
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Delete error:', error);
+        showNotification('Terjadi kesalahan saat menghapus riwayat', 'error');
+        
+        // Restore button state
+        if (deleteButton && originalContent) {
+            deleteButton.disabled = false;
+            deleteButton.innerHTML = originalContent;
+        }
+    });
+}
+
+// Remove history card from DOM
+function removeHistoryCard(historyId) {
+    // Find the history card containing the delete button
+    const deleteButton = document.querySelector(`button[onclick="deleteHistory(${historyId})"]`);
+    
+    if (deleteButton) {
+        // Find the parent history card
+        const historyCard = deleteButton.closest('.history-card');
+        
+        if (historyCard) {
+            // Add fade-out animation
+            historyCard.style.transition = 'all 0.3s ease';
+            historyCard.style.opacity = '0';
+            historyCard.style.transform = 'translateX(100%)';
+            
+            // Remove from DOM after animation
+            setTimeout(() => {
+                historyCard.remove();
+                console.log('History card removed from DOM');
+            }, 300);
+        } else {
+            console.error('History card not found for ID:', historyId);
+        }
+    } else {
+        console.error('Delete button not found for ID:', historyId);
+    }
+}
+
+// Check if history container is empty and show empty state
+function checkEmptyState() {
+    const historyContainer = document.querySelector('.history-container');
+    const historyCards = document.querySelectorAll('.history-card');
+    
+    console.log('Checking empty state. Remaining cards:', historyCards.length);
+    
+    if (historyCards.length === 0) {
+        console.log('No more history cards, showing empty state');
+        
+        // Create empty state HTML matching your blade template
+        const emptyStateHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <h3>Belum Ada Riwayat</h3>
+                <p>Mulai klasifikasi daun tomat untuk melihat riwayat di sini</p>
+                <a href="/klasifikasi" class="start-btn">
+                    <i class="fas fa-camera"></i>
+                    Mulai Klasifikasi
+                </a>
+            </div>
+        `;
+        
+        // Replace container content with empty state
+        if (historyContainer) {
+            historyContainer.innerHTML = emptyStateHTML;
+        }
+    }
+}
+
+// Enhanced initialization for history page
+function initHistoryPage() {
+    console.log('Initializing history page...');
+    
+    // Initialize solution toggles
+    initSolutionToggles();
+    
+    // Make deleteHistory globally available
+    window.deleteHistory = deleteHistory;
+    
+    // Add event listeners for delete buttons (as backup)
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    console.log('Found delete buttons:', deleteButtons.length);
+    
+    deleteButtons.forEach(button => {
+        // Extract history ID from onclick attribute
+        const onclickAttr = button.getAttribute('onclick');
+        if (onclickAttr) {
+            const match = onclickAttr.match(/deleteHistory\((\d+)\)/);
+            if (match) {
+                const historyId = match[1];
+                
+                // Add click event listener as backup to handle cases where onclick might not work
+                button.addEventListener('click', function(e) {
+                    // Only prevent default if onclick is not working
+                    if (!window.deleteHistory) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        deleteHistory(parseInt(historyId));
+                    }
+                });
+            }
+        }
+    });
+    
+    // Debug: Log current page structure
+    console.log('History page elements found:', {
+        historyContainer: !!document.querySelector('.history-container'),
+        historyCards: document.querySelectorAll('.history-card').length,
+        deleteButtons: document.querySelectorAll('.delete-btn').length,
+        solutionToggles: document.querySelectorAll('.solution-toggle').length
+    });
+}
+
+// Initialize solution toggles functionality
+function initSolutionToggles() {
+    const solutionToggles = document.querySelectorAll('.solution-toggle');
+    console.log('Found solution toggles:', solutionToggles.length);
+    
+    solutionToggles.forEach((toggle, index) => {
+        console.log(`Setting up toggle ${index + 1}`);
+        
+        // Remove any existing event listeners to prevent duplicates
+        const newToggle = toggle.cloneNode(true);
+        toggle.parentNode.replaceChild(newToggle, toggle);
+        
+        // Add new event listener
+        newToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleSolution(this);
+        });
+        
+        // Ensure initial state is correct
+        const solutionContent = newToggle.nextElementSibling;
+        if (solutionContent && solutionContent.classList.contains('solution-content')) {
+            solutionContent.style.display = 'none';
+            newToggle.classList.remove('active');
+        }
+    });
+}
+
+// Enhanced toggle solution function
+function toggleSolution(element) {
+    console.log('Toggling solution for element:', element);
+    
+    const solutionContent = element.nextElementSibling;
+    
+    if (!solutionContent || !solutionContent.classList.contains('solution-content')) {
+        console.error('Solution content not found or invalid structure');
+        return;
+    }
+    
+    const toggleIcon = element.querySelector('.toggle-icon');
+    const textSpan = element.querySelector('span');
+    const isCurrentlyHidden = solutionContent.style.display === 'none' || 
+                             solutionContent.style.display === '';
+    
+    if (isCurrentlyHidden) {
+        // Show solution
+        element.classList.add('active');
+        if (textSpan) textSpan.textContent = 'Sembunyikan Solusi';
+        if (toggleIcon) toggleIcon.style.transform = 'rotate(180deg)';
+        
+        solutionContent.style.display = 'block';
+        solutionContent.classList.add('show');
+    } else {
+        // Hide solution
+        element.classList.remove('active');
+        if (textSpan) textSpan.textContent = 'Lihat Solusi';
+        if (toggleIcon) toggleIcon.style.transform = 'rotate(0deg)';
+        
+        solutionContent.classList.remove('show');
+        setTimeout(() => {
+            solutionContent.style.display = 'none';
+        }, 300);
+    }
+}
+
+// Utility function to show notifications
+function showNotification(message, type = 'info') {
+    console.log(`Notification: ${message} (${type})`);
+    
+    // Remove any existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => notification.remove());
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    
+    const iconClass = type === 'success' ? 'fa-check-circle' : 
+                     type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+    const bgColor = type === 'success' ? '#4CAF50' : 
+                   type === 'error' ? '#f44336' : '#2196F3';
+    
+    notification.innerHTML = `
+        <i class="fas ${iconClass}"></i>
+        <span>${message}</span>
+    `;
+    
+    // Add styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${bgColor};
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: slideInRight 0.3s ease;
+        max-width: 350px;
+        word-wrap: break-word;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Remove notification after 4 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
+        }
+    }, 4000);
+}
+
+// Add required CSS animations
+function addNotificationStyles() {
+    if (document.getElementById('notification-styles')) return;
+    
+    const style = document.createElement('style');
+    style.id = 'notification-styles';
+    style.textContent = `
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        .history-card {
+            transition: all 0.3s ease;
+        }
+        
+        .solution-content {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .solution-content.show {
+            opacity: 1;
+            max-height: 1000px;
+        }
+        
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .delete-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Initialize everything when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    // Add required styles
+    addNotificationStyles();
+    
+    // Initialize history page if we're on it
+    if (document.getElementById('riwayat') || window.location.pathname.includes('history')) {
+        initHistoryPage();
+    }
+});
+
+// Make functions globally available
+window.deleteHistory = deleteHistory;
+window.toggleSolution = toggleSolution;
+window.initHistoryPage = initHistoryPage;
