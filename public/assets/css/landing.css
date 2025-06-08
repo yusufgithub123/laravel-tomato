@@ -1,0 +1,905 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8fffe;
+    overflow-x: hidden;
+    /* padding-top akan diatur oleh JavaScript */
+}
+
+/* Navbar Styles */
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+
+/* Brand/Logo */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #2d5a2d;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.navbar-brand i {
+    font-size: 28px;
+    color: #4CAF50;
+}
+
+/* Navigation Menu */
+.navbar-menu {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #2d5a2d;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.nav-item:hover {
+    color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+    transform: translateY(-2px);
+}
+
+.nav-item.active {
+    color: #4CAF50;
+    background: rgba(76, 175, 80, 0.15);
+    border-color: rgba(76, 175, 80, 0.3);
+}
+
+/* Auth Buttons */
+.navbar-auth {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-login, .btn-register {
+    padding: 12px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: 2px solid #4CAF50;
+}
+
+.btn-login {
+    color: #4CAF50;
+    background: transparent;
+}
+
+.btn-login:hover {
+    background: #4CAF50;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+
+.btn-register {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-register:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+}
+
+/* Mobile Toggle */
+.mobile-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.mobile-toggle:hover {
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.mobile-toggle span {
+    width: 25px;
+    height: 3px;
+    background: #2d5a2d;
+    margin: 3px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+.mobile-toggle.active span:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.mobile-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-toggle.active span:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
+/* Mobile Menu */
+.mobile-menu {
+    display: none;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-top: 1px solid #eee;
+    animation: slideDown 0.3s ease;
+}
+
+.mobile-menu.show {
+    display: block;
+}
+
+.mobile-nav-item {
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #2d5a2d;
+    font-weight: 600;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.mobile-nav-item:hover,
+.mobile-nav-item.active {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+}
+
+.mobile-auth-buttons {
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid #eee;
+}
+
+.mobile-btn-login,
+.mobile-btn-register {
+    flex: 1;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.mobile-btn-login {
+    color: #4CAF50;
+    border: 2px solid #4CAF50;
+    background: transparent;
+}
+
+.mobile-btn-register {
+    background: #4CAF50;
+    color: white;
+    border: 2px solid #4CAF50;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, #a8e6a3 0%, #88d682 25%, #7dd87a 50%, #6bb66e 75%, #5a9c5a 100%);
+    min-height: 100vh; /* Akan disesuaikan oleh JavaScript */
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    /* padding-top di sini juga dihapus */
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="80" cy="80" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="40" cy="60" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>') repeat;
+    opacity: 0.3;
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content {
+    animation: slideInLeft 1s ease-out;
+}
+
+.hero-title {
+    font-size: 3.5em;
+    font-weight: 800;
+    color: #2d5a2d;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.3em;
+    color: #2d5a2d;
+    margin-bottom: 30px;
+    opacity: 0.9;
+    font-weight: 600;
+}
+
+.hero-description {
+    font-size: 1.1em;
+    color: #2d5a2d;
+    margin-bottom: 40px;
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 16px 32px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4CAF50, #66BB6A);
+    color: white;
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #2d5a2d;
+    border: 2px solid #2d5a2d;
+}
+
+.btn-secondary:hover {
+    background: #2d5a2d;
+    color: white;
+    transform: translateY(-3px);
+}
+
+/* Hero Visual */
+.hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    animation: slideInRight 1s ease-out;
+}
+
+.hero-image {
+    width: 100%;
+    max-width: 500px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+
+    /* Perubahan untuk menggunakan gambar sebagai background */
+    background-image: url('/assets/images/tomat.jpg'); /* Gambar tomat sebagai background */
+    background-size: cover; /* Memastikan gambar menutupi area */
+    background-position: center; /* Memusatkan gambar */
+}
+
+/* Sembunyikan elemen <img> karena kita menggunakan gambar sebagai background div */
+.tomato-image {
+    display: none; 
+}
+
+
+.hero-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent);
+}
+
+.plant-icon {
+    font-size: 120px;
+    color: #2d5a2d;
+    animation: plantGrow 2s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+}
+
+.floating-elements {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.floating-element {
+    position: absolute;
+    font-size: 30px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.floating-element:nth-child(1) {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.floating-element:nth-child(2) {
+    top: 70%;
+    right: 15%;
+    font-size: 25px;
+    animation-delay: 1s;
+}
+
+.floating-element:nth-child(3) {
+    bottom: 30%;
+    left: 20%;
+    font-size: 35px;
+    animation-delay: 2s;
+}
+
+/* Features Section */
+.features {
+    padding: 100px 0;
+    background: #f8fffe;
+    position: relative;
+}
+
+.features-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #2d5a2d;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.section-subtitle {
+    font-size: 1.2em;
+    color: #666;
+    text-align: center;
+    margin-bottom: 60px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    margin-top: 60px;
+}
+
+.feature-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(76, 175, 80, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #4CAF50, #66BB6A);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(76, 175, 80, 0.2);
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #4CAF50, #66BB6A);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+}
+
+.feature-icon i {
+    font-size: 35px;
+    color: white;
+}
+
+.feature-title {
+    font-size: 1.4em;
+    font-weight: 600;
+    color: #2d5a2d;
+    margin-bottom: 15px;
+}
+
+.feature-description {
+    color: #666;
+    line-height: 1.6;
+    font-size: 1em;
+}
+
+/* Disease Types Section */
+.diseases {
+    padding: 100px 0;
+    background: linear-gradient(135deg, #f0f9f0 0%, #e8f5e8 100%);
+}
+
+.diseases-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.diseases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 60px;
+}
+
+.disease-card {
+    background: white;
+    padding: 30px 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(76, 175, 80, 0.1);
+    position: relative;
+}
+
+.disease-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(76, 175, 80, 0.15);
+}
+
+.disease-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #4CAF50, #66BB6A);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
+}
+
+.disease-icon i {
+    font-size: 30px;
+    color: white;
+}
+
+.disease-title {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: #2d5a2d;
+    margin-bottom: 12px;
+}
+
+.disease-description {
+    color: #666;
+    line-height: 1.5;
+    font-size: 0.95em;
+}
+
+/* Auth Modal */
+.auth-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 3000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.auth-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    margin: 20px;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+.auth-modal.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #4CAF50, #66BB6A);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+}
+
+.modal-icon i {
+    font-size: 35px;
+    color: white;
+}
+
+.modal-title {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #2d5a2d;
+    margin-bottom: 15px;
+}
+
+.modal-text {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center; /* Align items vertically in case of wrapping */
+}
+
+.modal-btn {
+    padding: 12px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.modal-btn.primary {
+    background: #4CAF50;
+    color: white;
+}
+
+.modal-btn.primary:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+}
+
+.modal-btn.secondary {
+    background: transparent;
+    color: #666;
+    border: 2px solid #ddd;
+}
+
+.modal-btn.secondary:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+/* Animations */
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes plantGrow {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    /* Hapus padding-top dari body pada media query ini juga */
+    /* body { padding-top: 0; } */ 
+
+    .navbar-menu,
+    .navbar-auth {
+        display: none;
+    }
+    
+    .mobile-toggle {
+        display: flex;
+    }
+    
+    .hero-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+        /* Padding top ini juga akan di handle JS */
+        /* padding-top: 70px; */ 
+    }
+    
+    .hero-title {
+        font-size: 2.5em;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1em;
+    }
+    
+    .hero-description {
+        font-size: 1em;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        padding: 14px 28px;
+        font-size: 1em;
+    }
+    
+    .section-title {
+        font-size: 2em;
+    }
+    
+    .features-grid,
+    .diseases-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .feature-card,
+    .disease-card {
+        padding: 30px 20px;
+    }
+    
+    .modal-content {
+        padding: 30px 20px;
+    }
+    
+    .modal-buttons {
+        flex-direction: column;
+    }
+    
+    .modal-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-container {
+        padding: 0 15px;
+    }
+    
+    .navbar-brand {
+        font-size: 20px;
+    }
+    
+    .navbar-brand i {
+        font-size: 24px;
+    }
+    
+    .hero {
+        /* Padding top di sini juga akan di handle JS */
+        /* padding-top: 70px; */ 
+        min-height: calc(100vh - 70px);
+    }
+    
+    .hero-title {
+        font-size: 2em;
+    }
+    
+    .hero-image {
+        height: 300px;
+    }
+    
+    .plant-icon {
+        font-size: 80px;
+    }
+    
+    .floating-element {
+        font-size: 20px;
+    }
+    
+    .features,
+    .diseases {
+        padding: 60px 0;
+    }
+    
+    .section-title {
+        font-size: 1.8em;
+    }
+    
+    .feature-icon,
+    .disease-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .feature-icon i,
+    .disease-icon i {
+        font-size: 25px;
+    }
+    
+    .mobile-auth-buttons {
+        flex-direction: column;
+    }
+    
+    .mobile-btn-login,
+    .mobile-btn-register {
+        flex: none;
+    }
+}
+
+@media (max-width: 320px) {
+    .navbar-brand {
+        font-size: 18px;
+    }
+    
+    .hero-title {
+        font-size: 1.8em;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        padding: 12px 20px;
+        font-size: 0.9em;
+    }
+}

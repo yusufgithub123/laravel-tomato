@@ -1,3 +1,4 @@
+{{-- slider.blade.php --}}
 <div class="hero-slider">
     <div class="slider-container">
         <div class="slide active">
@@ -25,7 +26,6 @@
                 </div>
             </div>
         </div>
-        <!-- Slide lainnya -->
     </div>
     <button class="slider-nav prev"><i class="fas fa-chevron-left"></i></button>
     <button class="slider-nav next"><i class="fas fa-chevron-right"></i></button>
