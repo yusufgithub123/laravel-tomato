@@ -990,14 +990,18 @@ if (document.readyState === 'loading') {
 window.initHistoryPage = initHistoryPage;
 window.toggleSolution = toggleSolution;
 window.debugSolutionStructure = debugSolutionStructure;
+
 // ===== CONTACT PAGE FUNCTIONALITY =====
 function initContactPage() {
-    // Parallax effect untuk background
+    // Parallax effect hanya untuk background, bukan untuk content box
     window.addEventListener('scroll', function() {
         const scrolled = window.pageYOffset;
-        const contactInfo = document.querySelector('.contact-info');
-        if (contactInfo) {
-            contactInfo.style.transform = `translateY(${scrolled * 0.1}px)`;
+        const contactSection = document.querySelector('.contact-section');
+        
+        // Hanya apply parallax ke background, bukan ke content
+        if (contactSection) {
+            // Gunakan pseudo-element atau background untuk parallax
+            contactSection.style.backgroundPositionY = `${scrolled * 0.1}px`;
         }
     });
     
@@ -1006,6 +1010,7 @@ function initContactPage() {
     contactItems.forEach(item => {
         item.addEventListener('mouseenter', function() {
             this.style.transform = 'translateX(10px)';
+            this.style.transition = 'transform 0.3s ease';
         });
         
         item.addEventListener('mouseleave', function() {
@@ -1014,6 +1019,65 @@ function initContactPage() {
     });
     
     // Animasi untuk social links
+    const socialLinks = document.querySelectorAll('.social-link');
+    socialLinks.forEach((link, index) => {
+        link.style.animationDelay = `${index * 0.1}s`;
+        
+        // Tambahan hover effect untuk social links
+        link.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.1) rotate(5deg)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+        
+        link.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1) rotate(0deg)';
+        });
+    });
+    
+    // Smooth scroll animation saat page load
+    const contactInfo = document.querySelector('.contact-info');
+    if (contactInfo) {
+        contactInfo.style.opacity = '0';
+        contactInfo.style.transform = 'translateY(30px)';
+        
+        // Animate in setelah page load
+        setTimeout(() => {
+            contactInfo.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            contactInfo.style.opacity = '1';
+            contactInfo.style.transform = 'translateY(0)';
+        }, 100);
+    }
+}
+
+// Alternative approach - jika ingin parallax hanya pada background
+function initContactPageAlternative() {
+    // Parallax hanya untuk background image/color
+    window.addEventListener('scroll', function() {
+        const scrolled = window.pageYOffset;
+        const contactBg = document.querySelector('.contact-background');
+        
+        // Hanya gerakkan background, bukan content
+        if (contactBg) {
+            contactBg.style.transform = `translateY(${scrolled * 0.1}px)`;
+        }
+    });
+    
+    // Atau bisa juga dengan CSS variables
+    document.documentElement.style.setProperty('--scroll-y', `${scrolled}px`);
+    
+    // Rest of the code remains the same...
+    const contactItems = document.querySelectorAll('.contact-item');
+    contactItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(10px)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0)';
+        });
+    });
+    
     const socialLinks = document.querySelectorAll('.social-link');
     socialLinks.forEach((link, index) => {
         link.style.animationDelay = `${index * 0.1}s`;
