@@ -1,3 +1,4 @@
+{{-- guide.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'Panduan - LeafGuard Tomato')

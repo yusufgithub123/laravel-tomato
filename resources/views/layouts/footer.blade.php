@@ -1,3 +1,4 @@
+{{-- footer.blade.php --}}
 <footer class="footer">
     <div class="container">
         <p>&copy; {{ date('Y') }} LEAFGUARD TOMATO. All Rights Reserved.</p>

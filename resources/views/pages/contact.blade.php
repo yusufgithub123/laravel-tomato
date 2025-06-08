@@ -1,3 +1,4 @@
+{{-- contact.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'Kontak - LeafGuard Tomato')
@@ -67,38 +68,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-// Animasi dan efek interaktif
-document.addEventListener('DOMContentLoaded', function() {
-    // Parallax effect untuk background
-    window.addEventListener('scroll', function() {
-        const scrolled = window.pageYOffset;
-        const contactInfo = document.querySelector('.contact-info');
-        if (contactInfo) {
-            contactInfo.style.transform = `translateY(${scrolled * 0.1}px)`;
-        }
-    });
-    
-    // Hover effect untuk contact items
-    const contactItems = document.querySelectorAll('.contact-item');
-    contactItems.forEach(item => {
-        item.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateX(10px)';
-        });
-        
-        item.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateX(0)';
-        });
-    });
-    
-    // Animasi untuk social links
-    const socialLinks = document.querySelectorAll('.social-link');
-    socialLinks.forEach((link, index) => {
-        link.style.animationDelay = `${index * 0.1}s`;
-    });
-});
-</script>
 @endsection

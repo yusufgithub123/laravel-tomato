@@ -1,3 +1,4 @@
+{{-- header.blade.php --}}
 <header class="header">
     <div class="container">
         <div class="logo">
@@ -12,16 +13,16 @@
         </button>
         
         <div class="auth-buttons">
-    @auth
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="btn-masuk">LOGOUT</button>
-        </form>
-    @else
-        <a href="{{ route('login') }}" class="btn-masuk">MASUK</a>
-        <a href="{{ route('register') }}" class="btn-daftar">DAFTAR</a>
-    @endauth
-</div>
+            @auth
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn-masuk">LOGOUT</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="btn-masuk">MASUK</a>
+                <a href="{{ route('register') }}" class="btn-daftar">DAFTAR</a>
+            @endauth
+        </div>
     </div>
 </header>
 
@@ -35,4 +36,6 @@
         <a href="{{ route('about') }}" class="nav-pill {{ request()->routeIs('about') ? 'active' : '' }}" data-page="tentang">TENTANG</a>
         <a href="{{ route('contact') }}" class="nav-pill {{ request()->routeIs('contact') ? 'active' : '' }}" data-page="kontak">KONTAK</a>
     </div>
+    
+    <!-- Mobile auth section will be added dynamically by JavaScript -->
 </nav>

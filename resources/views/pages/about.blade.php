@@ -1,3 +1,4 @@
+{{-- about.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'Tentang - LeafGuard Tomato')
@@ -33,7 +34,7 @@
             
             <div class="about-card mission-card">
                 <div class="card-icon">
-                    <i class="fas fa-bullseye"></i> <!-- Logo misi diubah ke bullseye yang lebih tepat -->
+                    <i class="fas fa-bullseye"></i>
                 </div>
                 <h3>Misi Kami</h3>
                 <div class="mission-list">
