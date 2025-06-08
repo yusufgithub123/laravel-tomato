@@ -610,3 +610,5 @@ function showError(message) {
         }
     }, 5000);
 }
+
+/*Beranda js*/
