@@ -533,14 +533,7 @@ function initUploadFunctionality() {
                 </div>
             </div>
             
-            <div class="result-row">
-                <div class="result-label">Tingkat Keparahan:</div>
-                <div class="result-value">
-                    <span class="severity-badge ${getSeverityClass(result.disease_info.severity)}">
-                        ${formatSeverity(result.disease_info.severity)}
-                    </span>
-                </div>
-            </div>
+            
             
             <hr>
             
@@ -805,8 +798,9 @@ function initDiseaseModal() {
         if (!disease) return;
         
         modalContent.innerHTML = `
-            <h2>${disease.title}</h2>
-            <img src="${disease.image}" alt="${disease.title}" style="max-width: 100%; height: auto; border-radius: 10px; margin: 15px 0;">
+         <h2 style="text-align: center;">${disease.title}</h2>
+        <img src="${disease.image}" alt="${disease.title}" style="max-width: 250px; height: auto; border-radius: 10px; margin: 15px auto; display: block;">
+
             <div style="text-align: left;">
                 <p><strong>Deskripsi:</strong></p>
                 <p style="margin-bottom: 20px;">${disease.description}</p>
@@ -845,38 +839,159 @@ function initDiseaseModal() {
     });
 }
 
-// ===== HISTORY PAGE FUNCTIONALITY =====
+// ===== ENHANCED SOLUTION TOGGLE FUNCTIONALITY =====
 function initHistoryPage() {
-    // Initialize solution toggles
+    console.log('Initializing history page...');
+    
+    // Initialize solution toggles with improved error handling
     const solutionToggles = document.querySelectorAll('.solution-toggle');
-    solutionToggles.forEach(toggle => {
-        toggle.addEventListener('click', function() {
-            toggleSolution(this);
-        });
+    console.log('Found solution toggles:', solutionToggles.length);
+    
+    solutionToggles.forEach((toggle, index) => {
+        console.log(`Setting up toggle ${index + 1}`);
+        
+        // Remove any existing event listeners
+        toggle.removeEventListener('click', handleToggleClick);
+        
+        // Add new event listener
+        toggle.addEventListener('click', handleToggleClick);
+        
+        // Ensure initial state is correct
+        const solutionContent = toggle.nextElementSibling;
+        if (solutionContent && solutionContent.classList.contains('solution-content')) {
+            solutionContent.style.display = 'none';
+            toggle.classList.remove('active');
+        }
     });
 
-    // Make delete function global
+    // Make functions globally available
     window.deleteHistory = deleteHistory;
     window.toggleSolution = toggleSolution;
 }
 
+function handleToggleClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const toggle = event.currentTarget;
+    console.log('Toggle clicked:', toggle);
+    
+    toggleSolution(toggle);
+}
+
 function toggleSolution(element) {
+    console.log('Toggling solution for element:', element);
+    
     const solutionContent = element.nextElementSibling;
+    
+    if (!solutionContent || !solutionContent.classList.contains('solution-content')) {
+        console.error('Solution content not found or invalid structure');
+        console.log('Next sibling:', solutionContent);
+        return;
+    }
+    
     const toggleIcon = element.querySelector('.toggle-icon');
     const textSpan = element.querySelector('span');
+    const isCurrentlyHidden = solutionContent.style.display === 'none' || 
+                             solutionContent.style.display === '';
     
-    if (solutionContent.style.display === 'none' || solutionContent.style.display === '') {
-        solutionContent.style.display = 'block';
-        toggleIcon.style.transform = 'rotate(180deg)';
-        textSpan.textContent = 'Sembunyikan Solusi';
-        element.classList.add('active');
+    console.log('Current state - Hidden:', isCurrentlyHidden);
+    
+    if (isCurrentlyHidden) {
+        // Show solution with animation
+        showSolution(element, solutionContent, toggleIcon, textSpan);
     } else {
-        solutionContent.style.display = 'none';
-        toggleIcon.style.transform = 'rotate(0deg)';
-        textSpan.textContent = 'Lihat Solusi';
-        element.classList.remove('active');
+        // Hide solution
+        hideSolution(element, solutionContent, toggleIcon, textSpan);
     }
 }
+
+function showSolution(toggle, content, icon, textSpan) {
+    console.log('Showing solution...');
+    
+    // Update toggle appearance
+    toggle.classList.add('active');
+    if (textSpan) textSpan.textContent = 'Sembunyikan Solusi';
+    if (icon) icon.style.transform = 'rotate(180deg)';
+    
+    // Show content with animation
+    content.style.display = 'block';
+    content.classList.add('show');
+    
+    // Force reflow to ensure animation works
+    content.offsetHeight;
+    
+    console.log('Solution shown successfully');
+}
+
+function hideSolution(toggle, content, icon, textSpan) {
+    console.log('Hiding solution...');
+    
+    // Update toggle appearance
+    toggle.classList.remove('active');
+    if (textSpan) textSpan.textContent = 'Lihat Solusi';
+    if (icon) icon.style.transform = 'rotate(0deg)';
+    
+    // Hide content
+    content.classList.remove('show');
+    
+    // Delay hiding to allow animation
+    setTimeout(() => {
+        content.style.display = 'none';
+    }, 300);
+    
+    console.log('Solution hidden successfully');
+}
+
+// Alternative method using event delegation (more reliable)
+function initSolutionTogglesWithDelegation() {
+    console.log('Initializing solution toggles with event delegation...');
+    
+    document.addEventListener('click', function(event) {
+        const toggle = event.target.closest('.solution-toggle');
+        if (toggle) {
+            event.preventDefault();
+            event.stopPropagation();
+            toggleSolution(toggle);
+        }
+    });
+}
+
+// Utility function to debug DOM structure
+function debugSolutionStructure() {
+    const toggles = document.querySelectorAll('.solution-toggle');
+    console.log('=== DEBUG: Solution Toggle Structure ===');
+    
+    toggles.forEach((toggle, index) => {
+        console.log(`Toggle ${index + 1}:`, toggle);
+        console.log('Next sibling:', toggle.nextElementSibling);
+        console.log('Next sibling classes:', 
+            toggle.nextElementSibling ? toggle.nextElementSibling.classList : 'No next sibling');
+        console.log('---');
+    });
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing...');
+    initHistoryPage();
+    
+    // Uncomment for debugging
+    // debugSolutionStructure();
+});
+
+// Fallback initialization
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHistoryPage);
+} else {
+    console.log('DOM already loaded, initializing immediately...');
+    initHistoryPage();
+}
+
+// Export functions for global access
+window.initHistoryPage = initHistoryPage;
+window.toggleSolution = toggleSolution;
+window.debugSolutionStructure = debugSolutionStructure;
 
 // Function untuk delete history dengan AJAX
 function deleteHistory(historyId) {

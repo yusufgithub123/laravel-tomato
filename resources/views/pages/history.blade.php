@@ -65,16 +65,16 @@
                             @endif
                         </div>
                         
-                        <!-- Solution Toggle -->
+                       <!-- Solution Toggle -->
                         @if($history->treatment || $history->prevention || $history->solution)
-                            <div class="solution-toggle" onclick="toggleSolution(this)">
+                            <div class="solution-toggle">
                                 <i class="fas fa-lightbulb"></i>
                                 <span>Lihat Solusi</span>
                                 <i class="fas fa-chevron-down toggle-icon"></i>
                             </div>
                             <div class="solution-content">
                                 @if($history->treatment)
-                                    <div class="solution-section">
+                                    <div class="solution-section" data-type="treatment">
                                         <div class="solution-header">
                                             <i class="fas fa-medkit"></i>
                                             <strong>Pengobatan:</strong>
@@ -84,7 +84,7 @@
                                 @endif
                                 
                                 @if($history->prevention)
-                                    <div class="solution-section">
+                                    <div class="solution-section" data-type="prevention">
                                         <div class="solution-header">
                                             <i class="fas fa-shield-alt"></i>
                                             <strong>Pencegahan:</strong>
@@ -95,6 +95,10 @@
                                 
                                 @if($history->solution && !$history->treatment && !$history->prevention)
                                     <div class="solution-section">
+                                        <div class="solution-header">
+                                            <i class="fas fa-lightbulb"></i>
+                                            <strong>Solusi:</strong>
+                                        </div>
                                         <p>{{ $history->solution }}</p>
                                     </div>
                                 @endif
