@@ -402,7 +402,7 @@ function initUploadFunctionality() {
             
             try {
                 console.log('Sending request to Python API...');
-                const response = await fetch('http://localhost:5000/predict', {
+                const response = await fetch('https://dyna-99-ml-tomato-api.hf.space/predict', {
                     method: 'POST',
                     body: formData
                 });
@@ -626,7 +626,7 @@ function initUploadFunctionality() {
 // Check API health
 async function checkApiHealth() {
     try {
-        const response = await fetch('http://localhost:5000/health', {
+        const response = await fetch('https://dyna-99-ml-tomato-api.hf.space/health', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json'
