@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class ClassificationController extends Controller
 {
-    private $pythonApiUrl = 'http://127.0.0.1:5000'; // Gunakan 127.0.0.1 instead of localhost
+    private $pythonApiUrl = 'https://ml-api-production-7867.up.railway.app'; // Gunakan 127.0.0.1 instead of localhost
 
     public function classify(Request $request)
     {
