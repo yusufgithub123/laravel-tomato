@@ -132,14 +132,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Parallax hero
-    window.addEventListener('scroll', function () {
-        const scrolled = window.pageYOffset;
-        const parallax = document.querySelector('.hero');
-        if (parallax && scrolled < window.innerHeight) {
-            const speed = scrolled * 0.2;
-            parallax.style.transform = `translateY(${speed}px)`;
-        }
-    });
+ //  window.addEventListener('scroll', function () {
+  //      const scrolled = window.pageYOffset;
+    //    const parallax = document.querySelector('.hero');
+      //  if (parallax && scrolled < window.innerHeight) {
+        //    const speed = scrolled * 0.2;
+          //  parallax.style.transform = `translateY(${speed}px)`;
+      //  }
+  //  });
 
     // Efek ketik judul hero
     function typeWriter(element, text, speed = 100) {
