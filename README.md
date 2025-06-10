@@ -11,7 +11,6 @@
 - [Tentang Proyek](#-tentang-proyek)
 - [Fitur Utama](#-fitur-utama)
 - [Teknologi yang Digunakan](#-teknologi-yang-digunakan)
-- [Arsitektur Sistem](#-arsitektur-sistem)
 - [Dataset](#-dataset)
 - [Instalasi](#-instalasi)
 - [Penggunaan](#-penggunaan)
@@ -110,6 +109,8 @@ Mengidentifikasi 11 kategori kondisi daun tomat:
 - **Kategori Tomat**: 11 kelas (10 penyakit + 1 sehat)
 - **Resolusi**: Berbagai resolusi, dinormalisasi ke 224x224 px
 - **Format**: JPG, JPEG dan PNG
+
+## 🚀 Instalasi
 
 ### 1. Clone Repository
 ```bash
