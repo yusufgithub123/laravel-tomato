@@ -14,9 +14,6 @@
 - [Dataset](#-dataset)
 - [Instalasi](#-instalasi)
 - [Penggunaan](#-penggunaan)
-- [API Endpoints](#-api-endpoints)
-- [Model Machine Learning](#-model-machine-learning)
-- [Deployment](#-deployment)
 - [Kontributor](#-kontributor)
 - [Lisensi](#-lisensi)
 
