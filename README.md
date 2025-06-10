@@ -21,6 +21,11 @@
 
 LEAFGUARD-TOMATO adalah solusi teknologi inovatif yang dirancang untuk membantu petani tomat di Indonesia mengidentifikasi penyakit pada daun tomat secara cepat dan akurat. Sistem ini menggunakan teknologi deep learning untuk mengklasifikasikan 11 jenis penyakit dan kondisi daun sehat.
 
+<div align="center">
+  <img src="public/assets/images/web.png" alt="LEAFGUARD TOMATO Platform" width="800">
+  <p><i>Tampilan Platform LEAFGUARD TOMATO</i></p>
+</div>
+
 ### 🎯 Latar Belakang Masalah
 - Kerugian hasil panen tomat mencapai **40-60%** akibat penyakit tanaman (Kementerian Pertanian, 2023)
 - Keterlambatan identifikasi penyakit menjadi masalah utama petani
