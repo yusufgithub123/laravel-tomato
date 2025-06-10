@@ -2158,7 +2158,7 @@ hr {
 
 .contact-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Changed from center to flex-start */
     gap: 18px;
     margin-bottom: 24px;
     padding: 18px;
@@ -2169,6 +2169,8 @@ hr {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    width: 100%; /* Ensure full width */
+    box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .contact-item::before {
@@ -2222,6 +2224,8 @@ hr {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    flex: 1; /* Take remaining space */
+    min-width: 0; /* Essential for text wrapping */
 }
 
 .contact-label {
@@ -2238,6 +2242,24 @@ hr {
     color: white;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     letter-spacing: 0.2px;
+    word-wrap: break-word; /* Break long words */
+    word-break: break-all; /* Break long emails/URLs */
+    overflow-wrap: break-word; /* Modern property */
+    line-height: 1.4;
+    max-width: 100%;
+}
+
+/* Specific styling for email links */
+.contact-value[href*="mailto"] {
+    word-break: break-all;
+    hyphens: none;
+    text-decoration: none;
+    color: white;
+}
+
+.contact-value[href*="mailto"]:hover {
+    opacity: 0.8;
+    text-decoration: underline;
 }
 
 .social-media h3 {
@@ -2253,6 +2275,7 @@ hr {
     display: flex;
     justify-content: center;
     gap: 16px;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
 .social-link {
@@ -2272,6 +2295,7 @@ hr {
     position: relative;
     overflow: hidden;
     animation: socialPulse 3s ease-in-out infinite;
+    flex-shrink: 0; /* Prevent shrinking */
 }
 
 .social-link::before {
@@ -3369,5 +3393,137 @@ hr {
     
     .nav-pills .mobile-logout-btn {
         display: block !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .contact-content {
+        min-height: 400px;
+        padding: 30px 20px;
+    }
+    
+    .contact-info {
+        padding: 25px 25px;
+        max-width: 100%;
+    }
+    
+    .info-header h2 {
+        font-size: 1.8em;
+    }
+    
+    .info-header p {
+        font-size: 0.9em;
+    }
+    
+    .contact-item {
+        padding: 16px;
+        gap: 16px;
+    }
+    
+    .contact-icon {
+        width: 42px;
+        height: 42px;
+    }
+    
+    .contact-value {
+        font-size: 1em;
+    }
+    
+    .social-link {
+        width: 44px;
+        height: 44px;
+        font-size: 1.2em;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .contact-wrapper {
+        margin: 0 10px;
+        border-radius: 16px;
+    }
+    
+    .contact-content {
+        padding: 20px 15px;
+    }
+    
+    .contact-info {
+        padding: 20px 20px;
+    }
+    
+    .info-header h2 {
+        font-size: 1.6em;
+    }
+    
+    .contact-item {
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .contact-icon {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .contact-icon i {
+        font-size: 1.1em;
+    }
+    
+    .contact-value {
+        font-size: 0.9em;
+    }
+    
+    .social-link {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1em;
+    }
+    
+    .social-links {
+        gap: 12px;
+    }
+}
+
+/* Very small screens (320px and below) */
+@media (max-width: 320px) {
+    .contact-wrapper {
+        margin: 0 5px;
+    }
+    
+    .contact-content {
+        padding: 15px 10px;
+    }
+    
+    .contact-info {
+        padding: 15px 15px;
+    }
+    
+    .contact-item {
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    .contact-value {
+        font-size: 0.85em;
+        line-height: 1.3;
+    }
+}
+
+/* Animation keyframes */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes socialPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
     }
 }
