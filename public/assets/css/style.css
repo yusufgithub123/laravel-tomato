@@ -3344,3 +3344,30 @@ hr {
         display: none !important;
     }
 }
+
+
+/* Hide logout buttons based on screen size */
+@media (min-width: 769px) {
+    /* Hide mobile logout in desktop navbar */
+    .nav-pills .mobile-logout-form,
+    .nav-pills .mobile-logout-btn,
+    .nav-pills .mobile-auth-btn {
+        display: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Hide desktop auth buttons in mobile */
+    .auth-buttons {
+        display: none !important;
+    }
+    
+    /* Show only the red logout button in mobile navbar */
+    .nav-pills .mobile-logout-form {
+        display: block !important;
+    }
+    
+    .nav-pills .mobile-logout-btn {
+        display: block !important;
+    }
+}
