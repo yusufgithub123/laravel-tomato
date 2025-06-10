@@ -272,6 +272,6 @@ SOFTWARE.
 
 ---
 
-**LEAFGUARD-TOMATO** - *Melindungi Tanaman, Meningkatkan Hasil Panen* 🍅🛡️
+LEAFGUARD-TOMATO - *Melindungi Tanaman, Meningkatkan Hasil Panen* 🍅🛡️
 
-*Dibuat dengan ❤️ oleh Tim CC25-CF276 untuk petani Indonesia*
+Dibuat dengan ❤️ oleh Tim CC25-CF276 untuk petani Indonesia
