@@ -2493,75 +2493,129 @@ hr {
     }
     
     /* Navigation Mobile */
-    .nav-container {
-        position: fixed;
-        top: 0;
-        left: -100%;
-        width: 280px;
-        height: 100vh;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        transition: left 0.3s ease;
-        z-index: 999;
-        padding-top: 80px;
-        display: flex;
-        flex-direction: column;
+.nav-container {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 280px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    transition: left 0.3s ease;
+    z-index: 999;
+    padding-top: 80px;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-container.active {
+    left: 0;
+}
+
+.nav-pills {
+    flex-direction: column;
+    gap: 0;
+    background: transparent;
+    padding: 20px;
+    border-radius: 0;
+    flex: 1;
+}
+
+.nav-pill {
+    width: 100%;
+    text-align: left;
+    padding: 15px 20px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+    justify-content: flex-start;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.nav-pill:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateX(5px);
+}
+
+.nav-pill.active {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+}
+
+/* Mobile Logout Form */
+.mobile-logout-form {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.mobile-logout-btn {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    color: white !important;
+    border: none;
+    font-family: inherit;
+}
+
+.mobile-logout-btn:hover {
+    background: linear-gradient(135deg, #d32f2f, #b71c1c);
+    transform: translateX(5px);
+}
+
+/* Mobile Auth Buttons */
+.mobile-auth-btn {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white !important;
+    margin-bottom: 5px;
+}
+
+.mobile-auth-btn:hover {
+    background: linear-gradient(135deg, #1976D2, #1565C0);
+    transform: translateX(5px);
+}
+
+/* Last auth button styling */
+.mobile-auth-btn:last-child {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    margin-bottom: 0;
+}
+
+/* Hide logout buttons based on screen size */
+@media (min-width: 769px) {
+    /* Hide mobile logout in desktop navbar */
+    .nav-pills .mobile-logout-form,
+    .nav-pills .mobile-logout-btn,
+    .nav-pills .mobile-auth-btn {
+        display: none !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Hide desktop auth buttons in mobile */
+    .auth-buttons {
+        display: none !important;
     }
     
-    .nav-container.active {
-        left: 0;
+    /* Hide any other logout buttons outside nav-pills */
+    .nav-container > form,
+    .nav-container > .mobile-auth-section,
+    .nav-container > .logout-section {
+        display: none !important;
     }
     
-    .nav-pills {
-        flex-direction: column;
-        gap: 0;
-        background: transparent;
-        padding: 20px;
-        border-radius: 0;
-        flex: 1;
+    /* Show only the red logout button in mobile navbar */
+    .nav-pills .mobile-logout-form {
+        display: block !important;
     }
     
-    .nav-pill {
-        width: 100%;
-        text-align: left;
-        padding: 15px 20px;
-        margin-bottom: 5px;
-        border-radius: 10px;
-        justify-content: flex-start;
+    .nav-pills .mobile-logout-btn {
+        display: block !important;
     }
-
-    /* Mobile Auth Buttons in Navigation */
-    .mobile-auth-section {
-        padding: 20px;
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
-        margin-top: auto;
-    }
-
-    .mobile-auth-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .mobile-auth-buttons .btn-masuk,
-    .mobile-auth-buttons .btn-daftar {
-        width: 100%;
-        text-align: center;
-        padding: 12px 20px;
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .mobile-logout-form {
-        width: 100%;
-    }
-
-    .mobile-logout-form .btn-masuk {
-        width: 100%;
-        background: linear-gradient(135deg, #f44336, #d32f2f);
-        color: white;
-        border: none;
-    }
+}
 
     
     
