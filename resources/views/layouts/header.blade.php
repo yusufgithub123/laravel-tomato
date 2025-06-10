@@ -35,7 +35,16 @@
         <a href="{{ route('history') }}" class="nav-pill {{ request()->routeIs('history') ? 'active' : '' }}" data-page="riwayat">RIWAYAT</a>
         <a href="{{ route('about') }}" class="nav-pill {{ request()->routeIs('about') ? 'active' : '' }}" data-page="tentang">TENTANG</a>
         <a href="{{ route('contact') }}" class="nav-pill {{ request()->routeIs('contact') ? 'active' : '' }}" data-page="kontak">KONTAK</a>
+        
+        <!-- Mobile Auth Section - Integrated with navigation (Mobile Only) -->
+        @auth
+            <form method="POST" action="{{ route('logout') }}" class="mobile-logout-form mobile-only">
+                @csrf
+                <button type="submit" class="nav-pill mobile-logout-btn">LOGOUT</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="nav-pill mobile-auth-btn mobile-only">MASUK</a>
+            <a href="{{ route('register') }}" class="nav-pill mobile-auth-btn mobile-only">DAFTAR</a>
+        @endauth
     </div>
-    
-    <!-- Mobile auth section will be added dynamically by JavaScript -->
 </nav>
