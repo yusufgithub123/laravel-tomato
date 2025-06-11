@@ -154,7 +154,7 @@ cp .env.example .env
 # Configure FLASK_APP, MODEL_PATH, etc.
 
 # Run Flask API
-python app.py
+python api.py
 ```
 
 ### 4. Run Application
