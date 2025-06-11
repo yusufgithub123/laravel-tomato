@@ -2,11 +2,6 @@
 
 **Sistem Klasifikasi Otomatis Penyakit Daun Tomat Menggunakan Deep Learning untuk Mendukung Petani Tomat di Indonesia**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://tensorflow.org/)
-[![Laravel](https://img.shields.io/badge/Laravel-11-red.svg)](https://laravel.com/)
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org/)
-
 ## 📋 Daftar Isi
 - [Tentang Proyek](#-tentang-proyek)
 - [Fitur Utama](#-fitur-utama)
@@ -106,18 +101,22 @@ Mengidentifikasi 11 kategori kondisi daun tomat:
 ## 📊 Dataset
 
 ### PlantVillage Dataset
-- **Sumber**: [Kaggle PlantVillage Dataset](https://www.kaggle.com/datasets/arjuntejaswi/plant-village)
-- **Total Gambar**: 54,000+ gambar berlabel
+- **Sumber**: [Kaggle Tomato Leaves Dataset](https://www.kaggle.com/datasets/ashishmotwani/tomato)
+- **Total Gambar**: 20,000+ gambar berlabel
 - **Kategori Tomat**: 11 kelas (10 penyakit + 1 sehat)
 - **Resolusi**: Berbagai resolusi, dinormalisasi ke 224x224 px
 - **Format**: JPG, JPEG dan PNG
 
 ## 🚀 Instalasi
 
+# LEAFGUARD-TOMATO: Project Setup & Installation Guide
+
+## 🚀 Instalasi
+
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/your-team/leafguard-tomato.git
-cd leafguard-tomato
+git clone https://github.com/yusufgithub123/laravel-tomato.git
+cd laravel-tomato
 ```
 
 ### 2. Setup Backend (Laravel)
@@ -145,26 +144,66 @@ php artisan storage:link
 ```
 
 ### 3. Setup ML Model API
+
+#### Download Model File Terlebih Dahulu
 ```bash
-cd ml-api
+# Masuk ke folder ml-api
+cd ML-Tomato-api
+
+# Download model.h5 dari Google Drive
+# Kunjungi link berikut dan download file model.h5:
+# https://drive.google.com/file/d/1FeIL-xaqGNcq9xwa8GITdrRQZ1OKZoOH/view?usp=sharing
+
+# Pastikan file model.h5 sudah berada di dalam folder ML-Tomato-api/
+# Struktur folder harus seperti ini:
+# ML-Tomato-api/
+# ├── model.h5          <- File yang baru didownload
+# ├── requirements.txt
+# ├── Dockerfile
+# ├── app.py
+# ├── README.md
+# └── gitattributes
+```
+
+#### Install Dependencies dan Setup Environment
+```bash
+# Install Python dependencies
 pip install -r requirements.txt
 
 # Setup environment variables
 cp .env.example .env
-# Configure FLASK_APP, MODEL_PATH, etc.
+# Configure FLASK_APP, MODEL_PATH, etc. di file .env
 
+# Pastikan MODEL_PATH di .env mengarah ke model.h5
+# Contoh: MODEL_PATH=./model.h5
+```
+
+#### Run Flask API
+```bash
 # Run Flask API
-python api.py
+python app.py
 ```
 
 ### 4. Run Application
 ```bash
-# Laravel development server
+# Laravel development server (dari root directory)
 php artisan serve
 
-# ML API (di terminal terpisah)
-cd ml-api && python app.py
+# ML-Tomato-API (di terminal terpisah, dari folder ML-Tomato-api)
+cd ML-Tomato-API && python app.py
 ```
+
+## ⚠️ Catatan Penting
+
+- **Model File**: File `model.h5` tidak disertakan dalam repository GitHub karena keterbatasan ukuran file. Pastikan untuk mendownload terlebih dahulu sebelum menjalankan ML-Tomato-API.
+- **Struktur Folder**: Pastikan file `model.h5` berada di dalam folder `ML-Tomato-API/` setelah didownload.
+- **Dependencies**: Pastikan semua dependencies Python sudah terinstall dengan benar sebelum menjalankan Flask API.
+
+## 🔗 Link Download Model
+
+**Google Drive**: [Download model.h5](https://drive.google.com/file/d/1FeIL-xaqGNcq9xwa8GITdrRQZ1OKZoOH/view?usp=sharing)
+
+*Ukuran file: ~200MB+*
 
 ## 💻 Penggunaan
 
