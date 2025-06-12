@@ -80,8 +80,8 @@ Mengidentifikasi 11 kategori kondisi daun tomat:
 ## 🛠 Teknologi yang Digunakan
 
 ### Machine Learning
-- **TensorFlow 2.x** - Framework deep learning utama
-- **Python 3.8+** - Bahasa pemrograman
+- **TensorFlow** - Framework deep learning utama
+- **Python** - Bahasa pemrograman
 - **NumPy** - Operasi matematika dan array
 - **Pandas** - Manajemen dan analisis data
 - **Matplotlib** - Visualisasi training dan evaluasi
