@@ -18,8 +18,8 @@
             </div>
             <h2>Tentang LeafGuard Tomato</h2>
             <p>LEAFGUARD-TOMATO adalah sistem klasifikasi otomatis berbasis deep learning yang dirancang khusus untuk membantu petani Indonesia mengidentifikasi penyakit pada daun tomat secara cepat, akurat, dan mudah diakses.</p>
-            <p>Sistem ini menggunakan teknologi Convolutional Neural Network (CNN) dengan framework TensorFlow untuk mengenali berbagai jenis penyakit umum pada daun tomat seperti early blight (Alternaria solani), late blight (Phytophthora infestans), dan leaf mold (Fulvia fulva).</p>
-            <p>Melalui aplikasi web responsif yang dibangun dengan Laravel dan Vue.js, petani dapat mengunggah foto daun tomat menggunakan perangkat mobile mereka dan mendapatkan diagnosis serta rekomendasi penanganan dalam hitungan detik.</p>
+            <p>Sistem ini menggunakan teknologi Deep Learning dengan framework TensorFlow untuk mengenali berbagai jenis penyakit umum pada daun tomat seperti early blight (Alternaria solani), late blight (Phytophthora infestans), dan leaf mold (Fulvia fulva).</p>
+            <p>Melalui aplikasi web responsif yang dibangun dengan Laravel, petani dapat mengunggah foto daun tomat menggunakan perangkat mobile mereka dan mendapatkan diagnosis serta rekomendasi penanganan dalam hitungan detik.</p>
         </div>
 
         <!-- Vision & Mission Cards -->
@@ -70,7 +70,7 @@
                     <div class="stat-label">Kerugian Panen yang Dapat Dicegah</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">3</div>
+                    <div class="stat-number">10</div>
                     <div class="stat-label">Jenis Penyakit Terdeteksi</div>
                 </div>
                 <div class="stat-item">
